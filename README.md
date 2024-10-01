@@ -1,4 +1,6 @@
 # Slide
 
+By Hai Le, Josiah Kitchin, Miro Garcia
+Computer Science students a the University of Oregon
 
-A dating app written with react native
+A mobile dating app written with React Native on the Expo framework

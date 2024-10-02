@@ -3,12 +3,12 @@
    This includes the intro, login, etc. */ 
 
 import React from 'react';  
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, } from 'react-native';
 import headerStyles from './styles';
 
 interface headerProps { 
     mainText: string, 
-    subText?: string
+    subText?: string 
 }
 
 const MainHeader: React.FC<headerProps> = ({mainText, subText}) => { 

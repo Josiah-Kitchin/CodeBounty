@@ -5,18 +5,18 @@ import colors from '../../utils/colors';
 
 
 const headerStyles = StyleSheet.create({
-  container: { //The container is a box that stores the entire element 
+  container: {  
     flex: 1,
     alignItems: 'baseline',
     paddingTop: 100, 
     padding: 40, 
   },
-  largeText: {
+  largeText: { //text for things such as the welcome message 
     fontSize: 70, 
     fontWeight: 'bold',
     color: colors.primary, 
   },
-  mediumText: { 
+  mediumText: {  //subtext 
     fontSize: 25, 
     paddingTop: 20,
     fontStyle: 'italic', 

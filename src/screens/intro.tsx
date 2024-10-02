@@ -6,7 +6,7 @@ const IntroScreen = () => {
     return (
         <MainHeader
         mainText="Welcome to Slide"
-        subText="A dating app for college students ;)"/>
+        subText="A dating app for college students"/>
     )
 }
 

@@ -1,20 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+/*
+A dating app written by computer science students Hai Le, Josiah Kitchin and Miro Garcia
+at the University of Oregon
 
-export default function App() {
+*/
+
+
+import React, {useState} from 'react';
+import IntroScreen from './src/screens/intro'
+
+
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Josiah was here</Text>
-      <StatusBar style="auto" />
-    </View>
+    <IntroScreen/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+export default App;

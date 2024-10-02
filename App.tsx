@@ -6,7 +6,7 @@ at the University of Oregon
 
 
 import React, {useState} from 'react';
-import IntroScreen from './src/screens/intro'
+import IntroScreen from './src/screens/intro';
 
 
 
@@ -16,5 +16,4 @@ const App = () => {
   );
 }
 
-
-export default App;
+export default App; 

@@ -22,3 +22,4 @@ const MainHeader: React.FC<headerProps> = ({mainText, subText}) => {
 
 export default MainHeader;
 
+

@@ -6,14 +6,14 @@ at the University of Oregon
 
 
 import React, {useState} from 'react';
+import "@/global.css";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import IntroScreen from './src/screens/intro';
 
 
 
 const App = () => {
-  return (
-    <IntroScreen/>
-  );
+  return <GluestackUIProvider mode="light"><IntroScreen/></GluestackUIProvider>;
 }
 
 export default App; 

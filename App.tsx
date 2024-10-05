@@ -15,6 +15,8 @@ import { supabase } from './supabaseConfig';
 
 const App = () => {
 
+  //This is all just to test the database, from chat gpt. But this database is what we will use for login 
+  // and authentication. will be working more on this soon 
   useEffect(() => {
     const insertData = async () => {
       const { data, error } = await supabase

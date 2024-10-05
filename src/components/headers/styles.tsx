@@ -11,16 +11,19 @@ const headerStyles = StyleSheet.create({
     paddingTop: 100, 
     padding: 40, 
   },
-  largeText: { //text for things such as the welcome message 
-    fontSize: 70, 
-    fontWeight: 'bold',
+  mainText: { 
     color: colors.primary, 
+    fontSize: 60,
+    fontWeight: "bold"
+
+  }, 
+  subText: { 
+    color: "black", 
+    fontSize: 25,
+    marginTop: 20,
+    fontStyle: "italic",
+
   },
-  mediumText: {  //subtext 
-    fontSize: 25, 
-    paddingTop: 20,
-    fontStyle: 'italic', 
-  }
 });
 
 export default headerStyles;

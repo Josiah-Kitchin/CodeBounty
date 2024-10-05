@@ -1,13 +1,35 @@
 
+/* The intro screen is the first screen the user sees upon downloading the app
+used for logging in and signing up 
+*/
+
+
 import React from 'react'; 
 import MainHeader from '../components/headers/main_header';
+import { Button, ButtonText } from "@/components/ui/button";
+import introScreenStyles from "./styles";
+import { View } from "react-native";
 
-const IntroScreen = () => { 
+const IntroScreenStyles = () => { 
     return (
-        <MainHeader
-        mainText="Welcome to Slide"
-        subText="A dating app for college students"/>
+        <>
+
+            <MainHeader
+            mainText="Welcome to Slide"
+            subText="A dating app for college students"/>
+
+            <View style={introScreenStyles.buttonBox}>
+                <Button size="xl" style={introScreenStyles.buttons}>
+                    <ButtonText style={introScreenStyles.buttonText}>Log in</ButtonText>
+                </Button>
+
+                <Button size="xl" style={introScreenStyles.buttons}> 
+                    <ButtonText style={introScreenStyles.buttonText}>Sign Up</ButtonText>
+                </Button>
+            </View>
+
+        </>
     )
 }
 
-export default IntroScreen; 
+export default IntroScreenStyles; 

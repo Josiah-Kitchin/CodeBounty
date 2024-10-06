@@ -15,8 +15,8 @@ const IntroScreenStyles = () => {
         <>
 
             <MainHeader
-            mainText="Welcome to Slide"
-            subText="A dating app for college students"/>
+            mainText="Welcome to Soaker"
+            subText="A soaking paring app for mormans"/>
 
             <View style={introScreenStyles.buttonBox}>
                 <Button size="xl" style={introScreenStyles.buttons}>

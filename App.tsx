@@ -13,6 +13,7 @@ import { supabase } from './services/supabaseConfig';
 
 
 
+
 const App = () => {
 
   //This is all just to test the database, from chat gpt. But this database is what we will use for login 

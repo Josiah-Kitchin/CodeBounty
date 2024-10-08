@@ -13,7 +13,6 @@ import { View } from "react-native";
 const IntroScreenStyles = () => { 
     return (
         <>
-
             <MainHeader
             mainText="Welcome to Soaker"
             subText="A soaking paring app for mormans"/>
@@ -27,7 +26,6 @@ const IntroScreenStyles = () => {
                     <ButtonText style={introScreenStyles.buttonText}>Sign Up</ButtonText>
                 </Button>
             </View>
-
         </>
     )
 }

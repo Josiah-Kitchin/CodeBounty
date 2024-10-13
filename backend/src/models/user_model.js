@@ -8,8 +8,9 @@ The User model handles CRUD operations on the user table
 Functions
 --------------
 add_user(name, email, password): 
-    Adds user to the database 
+    Adds user to the database with name, email, and a hash of their password 
 
+    
 
 SQL user Table 
 --------------
@@ -30,10 +31,13 @@ Encryption is done using the bcrypt module
 */ 
 
 import db_connection from '../utils/database.cjs';
-import pkg from 'bcrypt';
-const { bcrypt } = pkg; //required as bcrypt is a commonJS module
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
+/* ----- Public ----- */
 
 const add_user = async (name, email, password) => {
 /* 
@@ -50,21 +54,41 @@ const add_user = async (name, email, password) => {
 	the users password (<=255 chars)
 */ 
 
-    //Encyption 
-    const salt_rounds = 10; //number of times the hashing algorithm processes the password
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashed_password = await bcrypt.hash(password, salt); 
+    try { 
 
+	const hashed_password = await hash_password(password);
 
-    const sql = 'INSERT INTO User (name, email, password) VALUES (?, ?, ?)';
-  
-    db_connection.query(sql, [id, username, hashed_password], (error, results) => {
-    if (error) {
-	console.error('Error adding user:', error);
+	const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+
+	db_connection.query(sql, [name, email, hashed_password], (error, results) => {
+	    if (error) throw error; 
+	});
+
+    } catch (error) { 
 	throw error; 
-    } else {
-	console.log('User added');
-    }});
+    }
 };
+
+
+
+
+
+/* ------ Private ------- */
+
+const hash_password = async (password) => { 
+    /* 
+	hash_password function uses bcrypt to hash the password
+	if the hash or salt generation from hash_passwrod fails, it will throw the failed 
+	hash error
+
+    */
+    const salt_rounds = parseInt(process.env.SALT_ROUNDS, 10); 
+    try { 
+	const hashed_password = await bcrypt.hash(password, salt_rounds);
+	return hashed_password; 
+    } catch (error) { 
+	throw new Error("Error hashing password: " + error.message);
+    } 
+}
 
 export {add_user}

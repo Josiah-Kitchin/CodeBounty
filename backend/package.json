@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "node app.js",
+    "test" : "jest"
+  },
   "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.1",

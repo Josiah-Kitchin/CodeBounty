@@ -1,49 +1,66 @@
 
 /*
 Testing file using jest for the user_mode.js file
-
-not currently working cause of ES6 javascript 
 */
 
-import {jest} from '@jest/globals';
-import add_user from '../models/user_model';
 
-jest.mock('mysql2/promise');
-jest.mock('bcrypt');
+const mysql = require('mysql2/promise');
+const bcrypt = require('bcrypt');
+const { add_user } = require('../models/user_model'); // Adjust the path as needed
+
+jest.mock('mysql2/promise'); // Mock the mysql2 library
+jest.mock('bcrypt'); // Mock bcrypt
 
 describe('add_user', () => {
-    const name = "John Doe";
-    const email = "testing@gmail.com";
-    const password = "password123";
-
     beforeEach(() => {
-	bcrypt.hash.mockResolvedValue(password, 10);
-	mysql.createConnection.mockResolvedValue({
-	    execute: jest.fn().mockResolvedValue([{}]), // Mock successful execution
-	    end: jest.fn().mockResolvedValue(), // Mock closing connection
-	});
+	// Clear any previous mock implementations
+	mysql.createConnection.mockClear();
+	bcrypt.hash.mockClear();
     });
+
+
+
 
     it('should add a user successfully', async () => {
-	const result = await addUser(name, email, password);
-	expect(result).toEqual({ success: true });
-	expect(bcrypt.hash).toHaveBeenCalledWith(password, 10);
-	
-	// Check that the execute method was called with the correct SQL query and parameters
-	const connection = await mysql.createConnection();
-	expect(connection.execute).toHaveBeenCalledWith(
-	  'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-	  [name, email, hashedPassword]
+	// Mock the database connection and execute method
+	const mockConnection = {
+	    query: jest.fn().mockResolvedValue([{}]), // Mock successful insertion
+	    end: jest.fn(),
+	};
+
+	mysql.createConnection.mockResolvedValue(mockConnection); // Return mocked connection
+
+	bcrypt.hash.mockResolvedValue('hashedPassword'); // Mock hashed password
+
+	const user = await add_user('John Doe', 'john@example.com', 'password123');
+
+	expect(mockConnection.query).toHaveBeenCalledWith(
+	    'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+	    ['John Doe', 'john@example.com', 'hashedPassword']
 	);
+
+	expect(user).toEqual({ name: 'John Doe', email: 'john@example.com' });
+	expect(mockConnection.end).toHaveBeenCalled(); // Ensure connection is closed
     });
 
-  it('should throw an error if adding user fails', async () => {
-    mysql.createConnection.mockResolvedValueOnce({
-      execute: jest.fn().mockRejectedValue(new Error('Database error')),
-      end: jest.fn().mockResolvedValue(),
-    });
 
-    await expect(addUser(name, email, password)).rejects.toThrow('Failed to add user');
+
+    /* --- Error Testing --- */
+
+    it('should throw an error for missing input', async () => {
+	await expect(add_user('', 'john@example.com', 'password123')).rejects.toThrow(
+	'All user info fields required'
+    );
+
   });
 });
+
+
+
+
+
+
+
+
+
 

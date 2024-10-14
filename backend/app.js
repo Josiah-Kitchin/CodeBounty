@@ -1,8 +1,7 @@
 
 
-import express from 'express';
-import sequelize from './utils/database.ts'
-import router from './routes/routes.ts'
+import router from './routes/routes.ts';
+import dotenv from 'dotenv';
 
 
 const app = express(); 
@@ -22,4 +21,4 @@ app.use(router);
 
 sequelize.sync();
 
-app.listen(5000);
+app.listen(parseInt(process.env.PORT));

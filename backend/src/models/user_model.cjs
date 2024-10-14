@@ -30,9 +30,9 @@ Encryption is done using the bcrypt module
 
 */ 
 
-import db_connection from '../utils/database.cjs';
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
+const db_connection = require('../utils/database.cjs');
+const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -56,6 +56,8 @@ const add_user = async (name, email, password) => {
 
     try { 
 
+	validate_user_info(name, email, password);
+	
 	const hashed_password = await hash_password(password);
 
 	const sql = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
@@ -66,7 +68,7 @@ const add_user = async (name, email, password) => {
 
     } catch (error) { 
 	throw error; 
-    }
+    } 
 };
 
 
@@ -91,4 +93,46 @@ const hash_password = async (password) => {
     } 
 }
 
-export {add_user}
+const validate_user_info = (name, email, password) => {
+    /*
+	validate_user_info takes the name, email and password and confirms 
+	it matches with our requirments. 
+
+	Requirments
+	-----------
+	All fields are filled in 
+	Valid email format
+	Password length < 8 
+	Password contain one number and special character 
+	Name length between 2 and 50
+
+    */
+    if (!name || !email || !password) { 
+	throw new Error("All user info fields required");
+    }
+
+    // Validate email format using a regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+	throw new Error("Invalid email format.");
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+	throw new Error("Password must be at least 8 characters long.");
+    }
+
+    // check for numbers and special characters
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+	throw new Error("Password must contain at least one number and one special character.");
+    }
+
+    // validate name length
+    if (name.length < 2 || name.length > 50) {
+	throw new Error("Name must be between 2 and 50 characters.");
+    }
+}
+
+
+module.exports = {add_user};

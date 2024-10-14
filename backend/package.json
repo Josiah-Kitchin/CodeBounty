@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node app.js",
-    "test" : "jest"
+    "test": "npx jest" 
   },
   "type": "module",
   "dependencies": {

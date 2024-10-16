@@ -1,22 +1,21 @@
 
 
-/*
-    
-    The MySqlDatabase is an implementation of the Database Interface. It implements simple CRUD 
-    methods and should not be implementing methods specific to certain data objects. jj
-    I.E. general methods for reading, creating, etc
-    but no methods for adding Users
-
-*/
-
 import dotenv from 'dotenv';
-import Database from './database_interface.ts';
+import Database from './database_interface.js';
 import {ConnectionOptions, createConnection} from "mysql2/promise.js";
 
 //Configures the enviornment variables from .env in the root dir
 dotenv.config()
 
-export class MySqlDatabase implements Database {
+class MySqlDatabase implements Database {
+    /*
+     * The MySqlDatabase is an implementation of the Database Interface. It implements simple CRUD 
+     * methods and should not be implementing methods specific to certain data objects. 
+     * I.E. general methods for reading, creating, etc
+     * but no methods for adding Users
+    */
+
+    
     private options: ConnectionOptions;
 
     constructor() {
@@ -29,23 +28,48 @@ export class MySqlDatabase implements Database {
     }
 
     public async create(tableName: string, data: object): Promise<void> {
-	/* Take a table name and insert the values paired with the given keys into the database */
+	/* The create method takes a table name and a data object and executes an 
+	 * INSERT INTO query. 
+	 *
+	 * Arguments
+	 * ---------
+	     *  tableName: The table to be queried 
+	     *  data: Any type of object, expecting key value pairs, where the keys 
+	     *        are treated as column names and the values are the value to the 
+	     *        corresponding column
+	*/
 
+	//Connect to the database 
 	const db = await createConnection(this.options); 
 
-	//Parse the data object so it can be put into the SQL query 
+	//Parse the data object into a valid sql query
 	const columns = Object.keys(data).join(', '); 
-	const placeHolders = Object.keys(data).map(() => '?').join(', ');
-	const values = Object.values(data);
-
-	const query = `INSERT INTO ${tableName} (${columns}) VALUES (${placeHolders})`;
+	const values = Object.values(data).map(value => `"${value}"`).join(', ');
+	const query = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
 
 	await db.execute(query)
 	await db.end(); 
     }   
+    
+    public async get(tableName: string): Promise<T> { 
+	/*  
+	 *  
+	 *
+	 * Arguments
+	 * ---------
+	     * 
+	     *   
+	     *        
+	     *        
+	 *
+	 */
+	    
+	    
+
+    }
 }
 
-const db = new MySqlDatabase(); 
-db.create("users", {name: "hi", email:"there", password:"josiah"});
+export default MySqlDatabase;
+
 
 

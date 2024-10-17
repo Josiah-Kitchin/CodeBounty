@@ -49,23 +49,35 @@ class MySqlDatabase implements Database {
 
 	await db.execute(query)
 	await db.end(); 
-    }   
-    
-    public async get(tableName: string): Promise<T> { 
-	/*  
+    }  
+
+    public async get(tableName: string, columns?: Array<string>, conditions?: Array<string>): Promise<void> { 
+	/* The get method returns ans object filled with columns and their values
+	 * from the table. 	
 	 *  
 	 *
 	 * Arguments
 	 * ---------
-	     * 
-	     *   
+	     * tableName: The table to be queried
+	     * columns?: An optional array of column names  
+	     * conditions?: an optional array of conditions 
 	     *        
-	     *        
-	 *
+	     * If columns are empty, then it selects all (*)
+	     * If conditions are empty, there are no conditions 
 	 */
-	    
-	    
 
+	const db = await createConnection(this.options);
+
+	//Parse the column names, assign * if the column argument is empty
+	const columnNames = columns ? columns.join(', ') : '*';
+	// Create the conditional query, leave empty if none 
+	const conditionQuery = conditions ? 'WHERE ' + conditions.join(', AND ') : '';  
+	const query = `SELECT ${columnNames} FROM ${tableName} ${conditionQuery}`;
+
+	
+	const results = await db.execute(query);
+	await db.end(); 
+	return results; 
     }
 }
 

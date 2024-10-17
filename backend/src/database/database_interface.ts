@@ -14,7 +14,7 @@ interface Database {
     // The Create method takes a TableName and inserts all data from the object into the database 
     create(tableName: string, data: object): Promise<void>;
     //
-    get(tableName: string): Promise<T>;
+    get(tableName: string, columns: Array<string>, conditions: Array<string>): Promise<void>;
 
 
     /* ---- FIX ME ---- */ 

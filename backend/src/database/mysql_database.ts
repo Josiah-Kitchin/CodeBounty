@@ -2,7 +2,7 @@
 
 import dotenv from 'dotenv';
 import Database from './database_interface.js';
-import {ConnectionOptions, createConnection} from "mysql2/promise.js";
+import {ConnectionOptions, createConnection, QueryResult} from "mysql2/promise.js";
 
 //Configures the enviornment variables from .env in the root dir
 dotenv.config()
@@ -47,11 +47,14 @@ class MySqlDatabase implements Database {
 	const values = Object.values(data).map(value => `"${value}"`).join(', ');
 	const query = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
 
-	await db.execute(query)
-	await db.end(); 
+	try {
+	    await db.execute(query);
+	}  finally { //cut connection to the database despite any errors 
+	    await db.end(); 
+	}
     }  
 
-    public async get(tableName: string, columns?: Array<string>, conditions?: Array<string>): Promise<void> { 
+    public async get(tableName: string, columns?: Array<string>, conditions?: Array<string>): Promise<QueryResult> { 
 	/* The get method returns ans object filled with columns and their values
 	 * from the table. 	
 	 *  
@@ -75,10 +78,16 @@ class MySqlDatabase implements Database {
 	const query = `SELECT ${columnNames} FROM ${tableName} ${conditionQuery}`;
 
 	
-	const results = await db.execute(query);
-	await db.end(); 
-	return results; 
+	try {
+	    const results = await db.execute(query);
+	    //Return the first element of the array, as that is the table data and not the parameters of the db
+	    return results.length > 0 ? results[0] : []; 
+	} finally {
+	    await db.end(); 
+	}
     }
+
+    
 }
 
 export default MySqlDatabase;

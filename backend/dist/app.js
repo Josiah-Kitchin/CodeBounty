@@ -1,3 +1,9 @@
-import mySqlDatabase from './utils/mysql_database.js';
+import mySqlDatabase from './database/mysql_database.js';
 const db = new mySqlDatabase();
-db.create("users", { name: "testing1", email: "testing2", password: "testing3" });
+try {
+    const data = await db.get("users", ["email", "name"]);
+    console.log(data);
+}
+catch (e) {
+    console.log(e);
+}

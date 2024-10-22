@@ -4,6 +4,7 @@
 
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js'
+import logRequests from './middlewares/logging.js'
 import express from 'express'
 
 dotenv.config();
@@ -14,6 +15,7 @@ const PORT = process.env.PORT;
 /* ---- Middleware ---- */
 
 app.use(express.json());
+app.use(logRequests);
 
 /* ---- Routes ---- */
 

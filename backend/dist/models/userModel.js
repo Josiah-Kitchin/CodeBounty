@@ -33,7 +33,7 @@ class User {
         try {
             validateUserData(user);
             user.password = hashPassword(user.password);
-            this.database.create(process.env.USER_TABLE, UserData);
+            this.database.create(process.env.USER_TABLE, user);
         }
         catch (error) {
             throw new Error(`Error adding User ${UserData.id}: ${error.message}`);

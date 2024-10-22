@@ -80,7 +80,7 @@ class UserModel {
     
     public async getNameById(id: number): Promise<string> { 
 	//Returns the name of the user by id
-	const name= await this.database.get("users", ["name"], [`ID = ${id}`])
+	const name = await this.database.get("users", ["name"], [`ID = ${id}`])
 	//the database get method returns a list of objects
 	if (name.length < 1) { 
 	    throw new Error("User Not Found");
@@ -91,7 +91,7 @@ class UserModel {
     public async getEmailById(id: number): Promise<string> {
 	//Returns the email of the user by id 
 	const email = await this.database.get("users", ["email"], [`ID = ${id}`])
-	if (name.length < 1) { 
+	if (email.length < 1) { 
 	    throw new Error("User Not Found");
 	}
 	return email[0].email

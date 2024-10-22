@@ -81,7 +81,7 @@ class MySqlDatabase implements Database {
 	try {
 	    const results = await db.execute(query);
 	    //Return the first element of the array, as that is the table data and not the parameters of the db
-	    return results.length > 0 ? results[0] : []; 
+	    return results.length > 1 ? results[0] : []; 
 	} finally {
 	    await db.end(); 
 	}

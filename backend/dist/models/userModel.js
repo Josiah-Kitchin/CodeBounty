@@ -28,13 +28,18 @@ class UserModel {
      *
      * Methods
      * --------
-    *  add(user: UserData<object>)
+    *  add(user: UserData<object>) Promise<void>
         * Responsible for validating user data, hashing password, and adding user data into the database
-    *  getNameById(id: number)
+    *  getNameById(id: number): Promise<string>
         * returns the name of the user with the given id
-    *  getEmailById(id: number)
+    *  getEmailById(id: number): Promise<string>
         * returns the email of the user with the given id
-        
+    *  updateName(id: number, newName: string): Promise<void>
+        * updates the name of the user with the given id
+    *  updateEmail(id: number, newEmail: string): Promise<void>
+        * updates the email of the user with the given id
+    *  delete(id: number): Promise<void>
+        * Deletes all data from the database of the user with the given id
      */
     database;
     constructor() {
@@ -66,7 +71,7 @@ class UserModel {
     async getEmailById(id) {
         //Returns the email of the user by id 
         const email = await this.database.get("users", ["email"], [`ID = ${id}`]);
-        if (name.length < 1) {
+        if (email.length < 1) {
             throw new Error("User Not Found");
         }
         return email[0].email;

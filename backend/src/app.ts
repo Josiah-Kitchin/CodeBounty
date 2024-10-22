@@ -4,11 +4,10 @@
 
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js'
+import express from 'express'
 
 dotenv.config();
 
-
-const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
 
@@ -18,7 +17,7 @@ app.use(express.json());
 
 /* ---- Routes ---- */
 
-app.use('/api/users', userRoutes);
+app.use('/api/', userRoutes);
 
 /* ---- Server ---- */
 app.listen(PORT, () => {

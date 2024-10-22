@@ -1,14 +1,19 @@
 
 import { Router, Request, Response } from 'express';
-import { createUser, getUserNameById } from '../controllers/userController.js';
+import UserController from '../controllers/userController.js' 
 
 const router = Router(); 
+const userController = new UserController();
+
+
+
 
 //Create a new user request 
-router.post('/api/users', createUser);   
+router.post('/users', (req: Request, res: Response) => {userController.addUser(req, res)});   
 
 //Get a user's name by id
-router.get('/api/users/:id/name', getUserNameById); 
+router.get('/users/:id', (req: Request, res: Response) => {userController.getUserNameById(req, res)}); 
+
 
 export default router; 
 

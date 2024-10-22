@@ -1,15 +1,14 @@
 import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes.js';
+import express from 'express';
 dotenv.config();
-const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
-// Middleware to parse JSON bodies
+/* ---- Middleware ---- */
 app.use(express.json());
-// Import your routes
-const userRoutes = require('./routes/userRoutes'); // Adjust the path as necessary
-// Use your routes
-app.use('/api/users', userRoutes);
-// Start the server
+/* ---- Routes ---- */
+app.use('/api/', userRoutes);
+/* ---- Server ---- */
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

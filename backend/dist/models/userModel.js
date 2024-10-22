@@ -46,7 +46,6 @@ class UserModel {
          */
         try {
             validateUserData(user);
-            this.database.create(process.env.USER_TABLE, user);
             user.password = await hashPassword(user.password);
             //await this.database.create(process.env.USER_TABLE, user);
             await this.database.create("users", user);
@@ -59,11 +58,17 @@ class UserModel {
         //Returns the name of the user by id
         const name = await this.database.get("users", ["name"], [`ID = ${id}`]);
         //the database get method returns a list of objects
+        if (name.length < 1) {
+            throw new Error("User Not Found");
+        }
         return name[0].name;
     }
     async getEmailById(id) {
         //Returns the email of the user by id 
         const email = await this.database.get("users", ["email"], [`ID = ${id}`]);
+        if (name.length < 1) {
+            throw new Error("User Not Found");
+        }
         return email[0].email;
     }
     async updateName(id, newName) {

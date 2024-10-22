@@ -1,5 +1,5 @@
 
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import UserModel from '../models/userModel.js'
 
 const router = Router(); 
@@ -7,7 +7,7 @@ const userModel = new UserModel();
 
 
 //Create a new user request 
-router.post('/users', async (req, res) => {
+router.post('/api/users', async (req: Request, res: Response): Response => {
     try {
 	await userModel.create(req.body);
 	return res.status(201).json({ message: "User Created"} );
@@ -17,7 +17,7 @@ router.post('/users', async (req, res) => {
 });
 
 //Get a user's name by id
-router.get('/users/:id/name', async (req, res) => {
+router.get('/api/users/:id/name', async (req: Request, res: Response): Response => {
     try {
 	const id = req.params.id; // Get the ID from the route parameters
 	const userName = await userModel.getNameById(id);
@@ -29,3 +29,5 @@ router.get('/users/:id/name', async (req, res) => {
 	return res.status(500).json( {error: error.message });
     }
 });
+
+export default router; 

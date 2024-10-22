@@ -4,13 +4,19 @@ class MockDatabase {
      */
     tables;
     constructor() {
-        this.tables = {};
+        this.tables = { users: [] };
     }
     async create(tableName, data) {
         await this.tables.tableName.push(data);
     }
     async get(tableName, columns, conditions) {
         return this.tables.tableName;
+    }
+    async update(tableName, id, data) {
+        return;
+    }
+    async delete(tableName, id) {
+        return;
     }
 }
 export default MockDatabase;

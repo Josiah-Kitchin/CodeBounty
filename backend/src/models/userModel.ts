@@ -50,10 +50,8 @@ class UserModel {
 	    * returns the name of the user with the given id  	
 	*  getEmailById(id: number): Promise<string>
 	    * returns the email of the user with the given id
-	*  updateName(id: number, newName: string): Promise<void> 
-	    * updates the name of the user with the given id 
-	*  updateEmail(id: number, newEmail: string): Promise<void> 
-	    * updates the email of the user with the given id 
+	*  update(id: number, data: object): Promise<void> 
+	    * updates the data of the user with the given id 
 	*  delete(id: number): Promise<void> 
 	    * Deletes all data from the database of the user with the given id
      */
@@ -97,20 +95,15 @@ class UserModel {
 	return email[0].email
     }
 
-    public async updateName(id: number, newName: string) { 
+    public async update(id: number, data: object) { 
 	//Updates the user's name found from their id  
-	await this.database.update("users", id, {name: newName});
-    }
-
-    public async updateEmail(id: number, newEmail: string) { 
-	//Updates the user's email found from their id '
-	await this.database.update("users", id, {email: newEmail});
+	await this.database.update("users", id, data);
     }
 
     public async delete(id: number) { 
 	//Deletes a user from the database found by their id 
 	await this.database.delete("users", id);
-    }
+    } 
 
 }
 

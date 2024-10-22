@@ -1,16 +1,15 @@
 
 
 
-import mySqlDatabase from './database/mysql_database.js';
+import {UserData, UserModel} from "./models/userModel.js"
 
-const db = new mySqlDatabase(); 
+const userModel = new UserModel(); 
 
-try { 
-    const data = await db.get("users", ["email", "name"]);
-    console.log(data);
-} catch (e) { 
-    console.log(e);
-}
+
+
+
+
+
 
 
 

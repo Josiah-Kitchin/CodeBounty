@@ -71,5 +71,36 @@ class MySqlDatabase {
             await db.end();
         }
     }
+    async update(tableName, id, data) {
+        /* Updates a database entry based on its tableName and id with the given data
+         * Arguments
+         * ---------
+             * tableName: The table to be queried
+             * id: the relational id that is uniquely given to each user
+             * data: an object that corresponds to the databse columns
+             * (data should be some interface depending on model )
+         */
+        const db = await createConnection(this.options);
+        //Parse the data to get the columns and values ready for the query 
+        const setValues = Object.entries(data).map(([key, value]) => `${key} = '${value}'`).join(', ');
+        const query = `UPDATE ${tableName} SET ${setValues} WHERE id = ${id}`;
+        try {
+            const results = await db.execute(query);
+        }
+        finally {
+            await db.end();
+        }
+    }
+    async delete(tableName, id) {
+        /* Deletes a an entry from a given tableName based on id */
+        const db = await createConnection(this.options);
+        const query = `DELETE FROM ${tableName} WHERE id = ${id}`;
+        try {
+            const results = await db.execute(query);
+        }
+        finally {
+            await db.end();
+        }
+    }
 }
 export default MySqlDatabase;

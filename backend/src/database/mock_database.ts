@@ -10,7 +10,7 @@ class MockDatabase implements Database {
     
     public tables: any; 
     constructor(){ 
-	this.tables = {};
+	this.tables = {users: []};
     }
      
     public async create(tableName: string, data: object): Promise<void> { 
@@ -19,6 +19,14 @@ class MockDatabase implements Database {
 
     public async get(tableName: string, columns?: Array<string>, conditions?: Array<string>): Promise<any> { 
 	return this.tables.tableName; 
+    }
+
+    public async update(tableName: string, id: number, data: object): Promise<void> { 
+	return 
+    }
+
+    public async delete(tableName: string, id: number) { 
+	return 
     }
 
 }

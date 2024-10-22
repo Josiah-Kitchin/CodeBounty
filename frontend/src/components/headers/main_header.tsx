@@ -14,7 +14,8 @@ interface headerProps {
 
 const MainHeader: React.FC<headerProps> = ({mainText, subText}) => { 
     return (
-        <View style={headerStyles.container}>
+        //<View style={headerStyles.container}>
+        <View>
             <Text style={headerStyles.mainText}>{mainText}</Text>
             <Text style={headerStyles.subText}>{subText}</Text>
         </View>

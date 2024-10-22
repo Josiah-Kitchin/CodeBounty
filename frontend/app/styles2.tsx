@@ -3,14 +3,23 @@
 
 import {StyleSheet} from 'react-native';
 
-
-const introScreen = StyleSheet.create({
+const IntroScreenStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fffff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'black',
+  },
 
   buttons: { 
     backgroundColor: "#d6d6d6",
     width: 300, 
-    height: 50,  
-    margin: 10,
+    height: 50,
+    //marginTop: 40,  
+    margin: 10, 
     justifyContent: "center",
     alignItems: "center",
   }, 
@@ -26,7 +35,7 @@ const introScreen = StyleSheet.create({
   }, 
   buttonPressed: { 
     backgroundColor: "#a0a0a0",
-  } 
+  } ,
 });
 
-export default introScreen;
+export default IntroScreenStyles;

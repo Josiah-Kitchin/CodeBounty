@@ -8,7 +8,7 @@ at the University of Oregon
 import React, {useEffect} from 'react';
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
-import IntroScreen from './src/screens/intro';
+import IntroScreen from './app';
 
 
 

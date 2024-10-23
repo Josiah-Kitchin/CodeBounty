@@ -24,8 +24,8 @@ Encryption is done using the bcrypt module
 
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
-import MySqlDatabase from "../database/mysql_database.js";
-import Database from "../database/database_interface.js";
+import MySqlDatabase from "../database/mysqlDatabase.js";
+import Database from "../database/databaseInterface.js";
 
 
 dotenv.config();

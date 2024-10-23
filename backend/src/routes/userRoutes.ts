@@ -17,7 +17,7 @@ router.get('/users/name/:id', (req: Request, res: Response) => { userController.
 //Get a user's email by id'
 router.get('/users/email/:id', (req: Request, res: Response) => { userController.getUserEmailById(req, res) });
 
-//Update the user data
+//Update the user data NEEDS TO BE FIXED 
 router.put("/users", (req: Request, res: Response) => { userController.updateUser(req, res) });  
 
 

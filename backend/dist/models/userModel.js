@@ -20,7 +20,7 @@ Encryption is done using the bcrypt module
 */
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
-import MySqlDatabase from "../database/mysql_database.js";
+import MySqlDatabase from "../database/mysqlDatabase.js";
 dotenv.config();
 class UserModel {
     /* The UserModel holds methods for storing user data into a database

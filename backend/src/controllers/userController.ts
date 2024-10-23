@@ -1,7 +1,6 @@
 
-/* 
-     The user controller file handles requests for operations on the UserModel
-*/
+
+/* --------- The user controller file handles requests for operations on the UserModel -------- */
 
 
 import { Request, Response } from 'express';

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import MainHeader from '../../src/components/headers/main_header'; 
+import MainHeader from '../../app/components/headers/main_header'; 
 
 test('renders correctly', () => {
   const { getByText } = render(

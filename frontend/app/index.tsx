@@ -5,29 +5,41 @@ used for logging in and signing up
 
 
 import React from 'react'; 
-import MainHeader from '../src/components/headers/main_header';
-import { Button, ButtonText } from "@/components/ui/button";
+import MainHeader from './components/headers/main_header';
+//import { Button, ButtonText } from "@/components/ui/button";
 import IntroScreenStyles from "./styles2";
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Animated } from 'react-native';
 import {Link} from 'expo-router';
-import headerStyles from '../src/components/headers/styles';
+import headerStyles from './components/headers/styles';
+import Button from './components/button/buttons';
+import LinearGradient from 'react-native-linear-gradient';
+import { useRef, useEffect } from 'react';
+import colors from './components/utils/colors';
 
 
 export default function Index() {
+
   return (
     <View style={styles.container}>
-      <Text style={headerStyles.mainText}>Freaker</Text>
-      <Link href="/signup" style={styles.button}>
-        Go to SignUp screen
-      </Link>
+      <View style={styles.textContainer}>
+        <Text style={styles.leftText}>Frea</Text>
+        <Text style={styles.rightText}>ker!</Text>
+      </View>
+      <View style={styles.footerContainer}>
+        <Button theme="signup" label="Sign Up"/>        
+        <Button theme="login" label="Login"/>
+      </View>
     </View>
   );
+  
+ 
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fffff',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -37,7 +49,31 @@ const styles = StyleSheet.create({
 
   button: {
     fontSize: 20,
+    marginTop: 10,
     textDecorationLine: 'underline',
     color: 'black',
+  },
+  
+  footerContainer: {
+    flex: 1 / 3,
+    alignItems: 'center',
+  },
+
+  textContainer: {
+    flexDirection: 'row', // Arrange text halves in a row
+  },
+  leftText: {
+    color: colors.primary, 
+    fontSize: 60,
+    fontWeight: "bold",
+    marginTop: 100,
+    textAlign: "center" // Color for the first half
+  },
+  rightText: {
+    color: colors.fprimary, 
+    fontSize: 60,
+    fontWeight: "bold",
+    marginTop: 100,
+    textAlign: "center" // Color for the second half
   },
 });

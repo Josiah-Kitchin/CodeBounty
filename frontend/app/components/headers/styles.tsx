@@ -1,7 +1,7 @@
 /* Styles for the headers */ 
 
 import {StyleSheet} from 'react-native';
-import colors from '../../utils/colors';
+import colors from '../utils/colors';
 
 
 const headerStyles = StyleSheet.create({

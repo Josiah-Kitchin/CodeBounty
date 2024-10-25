@@ -1,9 +1,9 @@
 
 
 const colors = { 
-    primary: '#E52B50',
-    background: '#f8f9f7',
-    fprimary: '#675a99',
+    primary: '#ff3c3c',
+    background: '#fff3e0',
+    fprimary: '#a8adf7',
     fbackground: '#433348'
 
 };

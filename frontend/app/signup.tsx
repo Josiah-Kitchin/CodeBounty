@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet } from 'react-native';
 import {Link} from 'expo-router';
-import colors from '../src/utils/colors';
+import colors from './components/utils/colors';
 
 export default function SignUpScreen() {
   return (

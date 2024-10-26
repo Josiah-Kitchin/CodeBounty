@@ -8,7 +8,7 @@ Author: Josiah Kitchin
 
 Overview
 
-Welcome to the backend of the Dating App .This project provides the server-side logic using Node.js, Express, and MySQL. It is designed to manage user profiles, match users, and handle messaging features.
+Welcome to the backend of Slide Dating App. This project provides the server-side logic using Node.js, Express, and MySQL. It is designed to manage user profiles, match users, and handle messaging features.
 
 
 Technologies Used

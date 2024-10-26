@@ -204,9 +204,9 @@ const validateNewUser = (user: UserData<object>): void => {
     }
 
     // validate name length and letters 
-    const nameTest = /^[A-Z]+$/i;
-    if ((user.name.length < 2 || user.name.length > 50) && nameTest.test(user.name)) {
-	throw new Error("Name must be between 2 and 50 characters.");
+    const nameTest = /^[a-z ,.'-]+$/i;
+    if (!nameTest.test(user.name)) {
+	throw new Error("Name must be between 2 and 50 characters and contain only letters.");
     }
 }
 
@@ -224,7 +224,7 @@ const validateUserUpdate = (data: UserUpdateData<object>) => {
 	}
     }
     if (data.name !== undefined) { 
-	const nameTest = /^[A-Z]+$/i;
+	const nameTest = /^[a-z ,.'-]+$/i;
 	if (data.name.length < 2 || data.name.length > 50) {
 	    throw new Error("Name must be between 2 and 50 characters.");
 	}

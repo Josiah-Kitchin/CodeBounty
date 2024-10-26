@@ -37,7 +37,7 @@ describe('User Model Add/Get', () => {
 	const testBadEmail = {id: 10, name: "Fred Marcus", email: "hithere", password: "testPass52!"};
 	const testBadPassword = {id: 11, name: "Fred Marcus", email: "tester@gmail.com", password: "haha"};
 
-	expect(userModel.add(testBadName)).rejects.toThrow("Error adding User 8: Error: Name must be between 2 and 50 characters.")
+	expect(userModel.add(testBadName)).rejects.toThrow("Error adding User 8: Error: Name must be between 2 and 50 characters and contain only letters.")
 	expect(userModel.add(testBadEmail)).rejects.toThrow("Error adding User Fred Marcus: Error: Invalid email format.")
 	const p_message = `Error adding User Fred Marcus: Error: Password must 8 characters long, contain at least one number, one letter, and one special character.`
 	expect(userModel.add(testBadPassword)).rejects.toThrow(p_message); 
@@ -48,7 +48,35 @@ describe('User Model Add/Get', () => {
 
 describe("User update", () => {
     
+    test("update email", async () => {
+	const test = {id: 100, name: "computer", email: "computer@gmail.com", password: "fkjlds#123"};
 
+	await userModel.add(test);
+	
+	await userModel.update(100, {email: "newEmail@gmail.com"});
+	const email = await userModel.getEmailById(100);
+	expect(email).toBe("newEmail@gmail.com");
+    });   
 
+    test("update name", async () => {
+	await userModel.update(100, {name: "jerry"});
+	const name = await userModel.getNameById(100);
+
+	expect(name).toBe("jerry");
+    });
 });
+
+describe("User delete", () => {
+    
+    test("delete user", async () => {
+	const test = {id: 300, name: "iamhere", email: "iamhere@gmail.com", password: "fkjdlsjf#123"};
+	await userModel.add(test);
+	await userModel.delete(300);
+	expect(userModel.getNameById(300)).rejects.toThrow("User Not Found");
+    });
+});
+
+
+
+
 

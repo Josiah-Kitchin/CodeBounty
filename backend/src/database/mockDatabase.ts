@@ -48,11 +48,15 @@ class MockDatabase implements Database {
     }
 
     public async update(tableName: string, id: number, data: object): Promise<void> { 
-	return 
+	for (let table of this.tables[tableName]) { 
+	    if (table.id == id) {
+		Object.assign(table, data);
+	    }
+	}
     }
 
     public async delete(tableName: string, id: number) { 
-	return 
+	this.tables[tableName] = this.tables[tableName].filter((entry: object) => entry.id !== id);
     }
 
 }

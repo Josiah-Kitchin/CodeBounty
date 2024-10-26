@@ -13,4 +13,7 @@
     "strict": true,                                      /* Enable all strict type-checking options. */
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
   },
+  "exclude": [
+        "src/database/mockDatabase.ts" // Specify the exact path to the file you want to ignore
+    ]
 }

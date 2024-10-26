@@ -1,7 +1,7 @@
 
 
 import dotenv from 'dotenv';
-import Database from './database_interface.js';
+import Database from './databaseInterface.js';
 import {ConnectionOptions, createConnection, QueryResult} from "mysql2/promise.js";
 
 //Configures the enviornment variables from .env in the root dir
@@ -54,7 +54,7 @@ class MySqlDatabase implements Database {
 	}
     }  
 
-    public async get(tableName: string, columns?: Array<string>, conditions?: Array<string>): Promise<QueryResult> { 
+    public async get(tableName: string, columns?: Array<string>, conditions?: object): Promise<QueryResult> { 
 	/* The get method returns ans object filled with columns and their values
 	 * from the table. 	
 	 *  
@@ -63,7 +63,7 @@ class MySqlDatabase implements Database {
 	 * ---------
 	     * tableName: The table to be queried
 	     * columns?: An optional array of column names  
-	     * conditions?: an optional array of conditions 
+	     * conditions?: an optional array of conditions in json form  
 	     *        
 	     * If columns are empty, then it selects all (*)
 	     * If conditions are empty, there are no conditions 
@@ -73,11 +73,12 @@ class MySqlDatabase implements Database {
 
 	//Parse the column names, assign * if the column argument is empty
 	const columnNames = columns ? columns.join(', ') : '*';
-	// Create the conditional query, leave empty if none 
-	const conditionQuery = conditions ? 'WHERE ' + conditions.join(', AND ') : '';  
+	//Turn the condition object into sql conditions
+	const conditionStatement = conditions ? conditionToSql(conditions) : '';
+	//Connect the statements together 
+	const conditionQuery = 'WHERE ' + conditionStatement;
 	const query = `SELECT ${columnNames} FROM ${tableName} ${conditionQuery}`;
 
-	
 	try {
 	    const results = await db.execute(query);
 	    //Return the first element of the array, as that is the table data and not the parameters of the db
@@ -112,7 +113,7 @@ class MySqlDatabase implements Database {
     }
 
     public async delete(tableName: string, id: number): Promise<void> { 
-	/* Deletes a an entry from a given tableName based on id */
+	/* Deletes an entry from a given tableName based on id */
 	const db = await createConnection(this.options);
 
 	const query = `DELETE FROM ${tableName} WHERE id = ${id}`;
@@ -124,7 +125,25 @@ class MySqlDatabase implements Database {
     }
 }
 
-export default MySqlDatabase;
+
+/* ------------------------------------ Private ----------------------------------------------- */
+
+const conditionToSql = (condition: object): string => { 
+    //Converts an object to an sql statement. The statement will have quotes 
+    //around the value if the value is not a number 
+    const sqlConditions = Object.entries(condition).map(([key, value]) => {
+	    if (typeof value === 'number') { 
+		return `${key} = ${value}`
+	    } else { 
+		return `${key} = '${value}'`
+	    } 
+    });
+
+    return sqlConditions.join(' AND ')
+}
+
+export default MySqlDatabase
+export {conditionToSql};
 
 
 

@@ -24,8 +24,8 @@ Encryption is done using the bcrypt module
 
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
-import MySqlDatabase from "../database/mysql_database.js";
-import Database from "../database/database_interface.js";
+import MySqlDatabase from "../database/mysqlDatabase.js";
+import Database from "../database/databaseInterface.js";
 
 
 dotenv.config();
@@ -35,6 +35,12 @@ interface UserData<T> {
     name: string; 
     email: string; 
     password: string; 
+}
+
+interface UserUpdateData<T>{
+    name?: string; 
+    email?: string; 
+    password?: string; 
 }
 
 
@@ -50,12 +56,13 @@ class UserModel {
 	    * returns the name of the user with the given id  	
 	*  getEmailById(id: number): Promise<string>
 	    * returns the email of the user with the given id
-	*  updateName(id: number, newName: string): Promise<void> 
-	    * updates the name of the user with the given id 
-	*  updateEmail(id: number, newEmail: string): Promise<void> 
-	    * updates the email of the user with the given id 
+	*  update(id: number, UserUpdateData: object): Promise<void> 
+	    * updates the data of the user with the given id 
 	*  delete(id: number): Promise<void> 
 	    * Deletes all data from the database of the user with the given id
+	* logIn(email: string, password: string) 
+	    * Takes an email and password and checks if it exists in the database. If not, throw an error 
+	    
      */
 
     public database: Database;
@@ -69,7 +76,7 @@ class UserModel {
 	 * to the database. If any of these operations fail, it will throw an error
 	 */
 	try {
-	    validateUserData(user);
+	    validateNewUser(user);  
 	    user.password = await hashPassword(user.password);
 	    //await this.database.create(process.env.USER_TABLE, user);
 	    await this.database.create("users", user);
@@ -80,38 +87,63 @@ class UserModel {
     
     public async getNameById(id: number): Promise<string> { 
 	//Returns the name of the user by id
-	const name = await this.database.get("users", ["name"], [`ID = ${id}`])
+	const name = await this.database.get("users", ["name"], {ID: id})
 	//the database get method returns a list of objects
 	if (name.length < 1) { 
-	    throw new Error("User Not Found");
+	    throw new Error(`User Not Found`);
 	}
-	return name[0].name 
+	return name.at(0).name 
     }
 
     public async getEmailById(id: number): Promise<string> {
 	//Returns the email of the user by id 
-	const email = await this.database.get("users", ["email"], [`ID = ${id}`])
+	const email = await this.database.get("users", ["email"], {"ID": id})
 	if (email.length < 1) { 
 	    throw new Error("User Not Found");
 	}
-	return email[0].email
+	return email.at(0).email
     }
 
-    public async updateName(id: number, newName: string) { 
+    public async update(id: number, data: UserUpdateData<object>): Promise<void> { 
 	//Updates the user's name found from their id  
-	await this.database.update("users", id, {name: newName});
+	try {
+	    validateUserUpdate(data);
+	    if (data.password !== undefined) { 
+		data.password = await hashPassword(data.password);
+	    }
+	    await this.database.update("users", id, data);
+	} catch (error) { 
+	    throw new Error(`Error updating User ${id}: ${error}`);
+	}
     }
 
-    public async updateEmail(id: number, newEmail: string) { 
-	//Updates the user's email found from their id '
-	await this.database.update("users", id, {email: newEmail});
-    }
-
-    public async delete(id: number) { 
+    public async delete(id: number): Promise<void> { 
 	//Deletes a user from the database found by their id 
-	await this.database.delete("users", id);
-    }
+	try { 
+	    await this.database.delete("users", id);
+	} catch (error) { 
+	    throw new Error(`User Not Found ${id}: ${error}`);
+	}
+    } 
 
+    public async logIn(inputEmail: string, inputPassword: string): Promise<void> { 
+	/* Search for the email and password in the database. Throw an error if it does not exist.
+	 * When using this function, you can test if it throws an error, if it does not the login should be 
+	 * completed 
+         */
+	try {
+	    //Get the password of the user with the given email
+	    const matchedUser = await this.database.get("users", ["password"], {email: inputEmail} );
+	    const storedPassword = matchedUser.at(0).password;
+	    //if the passwords don't match, throw an error. Otherwise, the funciton will complete
+	    //and the contoller will handle the response 
+	    if (!(await bcrypt.compare(inputPassword, storedPassword))) { 
+		throw new Error('Incorrect user email or password');
+	    }
+	} catch (error) {
+	    throw new Error('Incorrect user email or password');
+	}
+    }
 }
 
 
@@ -141,7 +173,7 @@ const hashPassword = async (password: string): Promise<string> => {
     } 
 }
 
-const validateUserData = (user: UserData<object>): void => {
+const validateNewUser = (user: UserData<object>): void => {
     /*
 	validate_user_info takes the name, email and password and confirms 
 	it matches with our requirments. 
@@ -150,7 +182,7 @@ const validateUserData = (user: UserData<object>): void => {
 	-----------
 	All fields are filled in 
 	Valid email format
-	Password length < 8 
+	Password length > 8 
 	Password contain one number and special character 
 	Name length between 2 and 50 and contain only letters 
 
@@ -165,21 +197,37 @@ const validateUserData = (user: UserData<object>): void => {
 	throw new Error("Invalid email format.");
     }
 
-    // Validate password strength
-    if (user.password.length < 8) {
-	throw new Error("Password must be at least 8 characters long.");
-    }
-
     // check for numbers and special characters
-    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     if (!passwordRegex.test(user.password)) {
-	throw new Error("Password must contain at least one number and one special character.");
+	throw new Error("Password must 8 characters long, contain at least one number, one letter, and one special character.");
     }
 
     // validate name length and letters 
-    const onlyLetters = /^[A-Za-z]+$/;
-    if ((user.name.length < 2 || user.name.length > 50) && onlyLetters.test(user.name)) {
+    const nameTest = /^[A-Z]+$/i;
+    if ((user.name.length < 2 || user.name.length > 50) && nameTest.test(user.name)) {
 	throw new Error("Name must be between 2 and 50 characters.");
+    }
+}
+
+const validateUserUpdate = (data: UserUpdateData<object>) => {
+    if (data.email !== undefined) { 
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(data.email)) {
+	    throw new Error("Invalid email format.");
+	}
+    }
+    if (data.password !== undefined) {
+	const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+	if (!passwordRegex.test(data.password)) {
+	    throw new Error("Password must 8 characters long, contain at least one number, one letter, and one special character.");
+	}
+    }
+    if (data.name !== undefined) { 
+	const nameTest = /^[A-Z]+$/i;
+	if (data.name.length < 2 || data.name.length > 50) {
+	    throw new Error("Name must be between 2 and 50 characters.");
+	}
     }
 }
 

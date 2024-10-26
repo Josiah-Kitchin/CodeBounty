@@ -46,11 +46,11 @@ export default function Button({ label, theme }: Props) {
   const router = useRouter(); // Initialize the router
 
   const handlePress = () => {
-    // Navigate based on the theme
+    // route based on the theme
     if (theme === 'signup') {
-      router.push('/signup'); // Navigate to signup
+      router.push('/signup'); 
     } else if (theme === 'login') {
-      router.push('/login'); // Navigate to login
+      router.push('/login'); 
     }
   };
 

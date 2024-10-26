@@ -1,5 +1,5 @@
 # Slide - Frontend
 
-Authors: Hai Le, Daniel   
+Authors: Hai Le, Daniel Asiamah 
 
 

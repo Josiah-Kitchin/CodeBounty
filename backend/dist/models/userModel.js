@@ -105,14 +105,17 @@ class UserModel {
          * completed
              */
         try {
+            //Get the password of the user with the given email
             const matchedUser = await this.database.get("users", ["password"], { email: inputEmail });
             const storedPassword = matchedUser.at(0).password;
+            //if the passwords don't match, throw an error. Otherwise, the funciton will complete
+            //and the contoller will handle the response 
             if (!(await bcrypt.compare(inputPassword, storedPassword))) {
                 throw new Error('Incorrect user email or password');
             }
         }
         catch (error) {
-            throw error;
+            throw new Error('Incorrect user email or password');
         }
     }
 }
@@ -163,9 +166,9 @@ const validateNewUser = (user) => {
         throw new Error("Password must 8 characters long, contain at least one number, one letter, and one special character.");
     }
     // validate name length and letters 
-    const nameTest = /^[A-Z]+$/i;
-    if ((user.name.length < 2 || user.name.length > 50) && nameTest.test(user.name)) {
-        throw new Error("Name must be between 2 and 50 characters.");
+    const nameTest = /^[a-z ,.'-]+$/i;
+    if (!nameTest.test(user.name)) {
+        throw new Error("Name must be between 2 and 50 characters and contain only letters.");
     }
 };
 const validateUserUpdate = (data) => {
@@ -182,7 +185,7 @@ const validateUserUpdate = (data) => {
         }
     }
     if (data.name !== undefined) {
-        const nameTest = /^[A-Z]+$/i;
+        const nameTest = /^[a-z ,.'-]+$/i;
         if (data.name.length < 2 || data.name.length > 50) {
             throw new Error("Name must be between 2 and 50 characters.");
         }

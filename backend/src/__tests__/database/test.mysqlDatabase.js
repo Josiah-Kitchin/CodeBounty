@@ -15,7 +15,7 @@ describe('Convert conditions', () => {
 
     test("Converts multiple conditions", () => {
 	const conditions = {"ID": 6, "name": "john", "email": "nothing"};
-	expect(conditionToSql(conditions)).toBe(`ID = 6, AND name = 'john' AND email = 'nothing'`);
+	expect(conditionToSql(conditions)).toBe(`ID = 6 AND name = 'john' AND email = 'nothing'`);
     })
 
 });

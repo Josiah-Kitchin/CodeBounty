@@ -29,8 +29,8 @@
     Request --> { none }
     Response --> { status }
 
-- Post /api/users/login
-    Login a user, compares the password with the given email and returns wthe status of the comparison
+- Post /users/login
+    Log in a user, compares the password with the given email and returns wthe status of the comparison
     Request --> { email, password }
     Response --> { status }
 

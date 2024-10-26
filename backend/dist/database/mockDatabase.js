@@ -35,10 +35,14 @@ class MockDatabase {
         return matchedTables;
     }
     async update(tableName, id, data) {
-        return;
+        for (let table of this.tables[tableName]) {
+            if (table.id == id) {
+                Object.assign(table, data);
+            }
+        }
     }
     async delete(tableName, id) {
-        return;
+        this.tables[tableName] = this.tables[tableName].filter((entry) => entry.id !== id);
     }
 }
 export default MockDatabase;

@@ -46,3 +46,9 @@ describe('User Model Add/Get', () => {
 
 });
 
+describe("User update", () => {
+    
+
+
+});
+

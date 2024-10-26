@@ -38,6 +38,9 @@ class UserModel {
         * updates the data of the user with the given id
     *  delete(id: number): Promise<void>
         * Deletes all data from the database of the user with the given id
+    * logIn(email: string, password: string)
+        * Takes an email and password and checks if it exists in the database. If not, throw an error
+        
      */
     database;
     constructor() {
@@ -94,6 +97,22 @@ class UserModel {
         }
         catch (error) {
             throw new Error(`User Not Found ${id}: ${error}`);
+        }
+    }
+    async logIn(inputEmail, inputPassword) {
+        /* Search for the email and password in the database. Throw an error if it does not exist.
+         * When using this function, you can test if it throws an error, if it does not the login should be
+         * completed
+             */
+        try {
+            const matchedUser = await this.database.get("users", ["password"], { email: inputEmail });
+            const storedPassword = matchedUser.at(0).password;
+            if (!(await bcrypt.compare(inputPassword, storedPassword))) {
+                throw new Error('Incorrect user email or password');
+            }
+        }
+        catch (error) {
+            throw error;
         }
     }
 }

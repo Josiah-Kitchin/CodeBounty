@@ -117,7 +117,7 @@ const conditionToSql = (condition) => {
             return `${key} = '${value}'`;
         }
     });
-    return sqlConditions.join(', AND ');
+    return sqlConditions.join(' AND ');
 };
 export default MySqlDatabase;
 export { conditionToSql };

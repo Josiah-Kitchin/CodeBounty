@@ -18,6 +18,8 @@ class UserController {
         * Takes a get request and returns the name of the user given by the user's Id
     * getUserEmailById
         * Takes a get request and returns the email of the user given by the user's Id'
+    * deleteUser
+        * Takes a delete request and deletes the user of the given id
      */
     model;
     constructor() {
@@ -122,6 +124,21 @@ class UserController {
         catch (e) {
             const error = ensureError(e);
             if (error.message.startsWith("User Not Found")) {
+                return res.status(404).json({ error: error.message });
+            }
+            return res.status(500).json({ error: error.message });
+        }
+    }
+    async logInUser(req, res) {
+        try {
+            const email = req.body.email;
+            const password = req.body.password;
+            await this.model.logIn(email, password);
+            return res.status(200).json({ message: "User logged in" });
+        }
+        catch (e) {
+            const error = ensureError(e);
+            if (error.message.startsWith("Incorrect")) {
                 return res.status(404).json({ error: error.message });
             }
             return res.status(500).json({ error: error.message });

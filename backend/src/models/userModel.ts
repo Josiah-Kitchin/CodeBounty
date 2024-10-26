@@ -60,6 +60,9 @@ class UserModel {
 	    * updates the data of the user with the given id 
 	*  delete(id: number): Promise<void> 
 	    * Deletes all data from the database of the user with the given id
+	* logIn(email: string, password: string) 
+	    * Takes an email and password and checks if it exists in the database. If not, throw an error 
+	    
      */
 
     public database: Database;
@@ -101,7 +104,7 @@ class UserModel {
 	return email.at(0).email
     }
 
-    public async update(id: number, data: UserUpdateData<object>) { 
+    public async update(id: number, data: UserUpdateData<object>): Promise<void> { 
 	//Updates the user's name found from their id  
 	try {
 	    validateUserUpdate(data);
@@ -114,7 +117,7 @@ class UserModel {
 	}
     }
 
-    public async delete(id: number) { 
+    public async delete(id: number): Promise<void> { 
 	//Deletes a user from the database found by their id 
 	try { 
 	    await this.database.delete("users", id);
@@ -122,6 +125,25 @@ class UserModel {
 	    throw new Error(`User Not Found ${id}: ${error}`);
 	}
     } 
+
+    public async logIn(inputEmail: string, inputPassword: string): Promise<void> { 
+	/* Search for the email and password in the database. Throw an error if it does not exist.
+	 * When using this function, you can test if it throws an error, if it does not the login should be 
+	 * completed 
+         */
+	try {
+	    //Get the password of the user with the given email
+	    const matchedUser = await this.database.get("users", ["password"], {email: inputEmail} );
+	    const storedPassword = matchedUser.at(0).password;
+	    //if the passwords don't match, throw an error. Otherwise, the funciton will complete
+	    //and the contoller will handle the response 
+	    if (!(await bcrypt.compare(inputPassword, storedPassword))) { 
+		throw new Error('Incorrect user email or password');
+	    }
+	} catch (error) {
+	    throw new Error('Incorrect user email or password');
+	}
+    }
 }
 
 

@@ -139,7 +139,7 @@ const conditionToSql = (condition: object): string => {
 	    } 
     });
 
-    return sqlConditions.join(', AND ')
+    return sqlConditions.join(' AND ')
 }
 
 export default MySqlDatabase

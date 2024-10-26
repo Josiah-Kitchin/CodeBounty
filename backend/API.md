@@ -29,6 +29,11 @@
     Request --> { none }
     Response --> { status }
 
+- Post /users/login
+    Login a user, compares the password with the given email and returns wthe status of the comparison
+    Request --> { email, password }
+    Response --> { status }
+
 
 
 

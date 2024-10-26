@@ -3,7 +3,7 @@
 # Welcome to Slide - A Mobile Dating App
 
 Backend Developer: Josiah Kitchin
-Frontend Developers: Hai Le, Daniel
+Frontend Developers: Hai Le, Daniel Asiamah
 
 
 

@@ -1,6 +1,6 @@
 # Welcome to Slide Dating App
 
-A mobile dating app created by University of Oregon College Students. 
+A mobile dating app created by University of Oregon Computer Science Students. 
 
 Authors: 
   -Front-End Development: Hai Le, Daniel 

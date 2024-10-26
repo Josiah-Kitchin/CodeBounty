@@ -21,9 +21,11 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+    <View style={styles.box} />
+
       <View style={styles.textContainer}>
-        <Text style={styles.leftText}>Frea</Text>
-        <Text style={styles.rightText}>ker!</Text>
+        <Text style={styles.leftText}>Swi</Text>
+        <Text style={styles.rightText}>tch</Text>
       </View>
       <View style={styles.footerContainer}>
         <Button theme="signup" label="Sign Up"/>        
@@ -76,4 +78,16 @@ const styles = StyleSheet.create({
     marginTop: 100,
     textAlign: "center" // Color for the second half
   },
+
+  box: {
+    position: 'absolute', // Positioning the box absolutely
+    top: 0, // Start from the top
+    right: 0, // Align to the right
+    width: '49%', // Cover half the width of the screen
+    height: '100%', // Cover the full height of the screen
+    backgroundColor: colors.fbackground, // Background color for the box
+    zIndex: -1,
+
+  }
+  
 });

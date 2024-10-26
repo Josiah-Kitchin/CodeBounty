@@ -5,11 +5,11 @@ import Button from './components/button/buttons';
 import { useState } from 'react';
 
 type Props = {
-  label: string;
+  //label: string;
   URL: string
 };
 
-export default function SignUpScreen({label, URL}: Props) {
+export default function SignUpScreen({URL}: Props) {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -73,14 +73,12 @@ export default function SignUpScreen({label, URL}: Props) {
       
       
       <View style={styles.buttonContainer}>
-      <Pressable style={[
-          styles.button, 
-          {backgroundColor: 'white'} 
-        ]} 
-        onPress = {handlePress}>
-
-        <Text style={styles.buttonLabel}>{label}</Text>
-      </Pressable>
+      <Pressable
+          style={[styles.button, { backgroundColor: 'white' }]}
+          onPress={handlePress}
+        >
+          <Text style={styles.buttonText}>Submit</Text>
+        </Pressable>
     </View>
 
       <Link href="/" style={styles.button2}>
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textDecorationLine: 'underline',
     color: 'black',
-    marginTop : 180,
+    marginTop : 100,
   },
 
   footerContainer: {
@@ -157,6 +155,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     alignItems: 'center',
+  },
+  
+  buttonText: {
+    color: 'black',
+    fontSize: 16,
   },
 });
 

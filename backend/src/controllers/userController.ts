@@ -25,6 +25,8 @@ class UserController {
 	    * Takes a get request and returns the name of the user given by the user's Id
 	* getUserEmailById
 	    * Takes a get request and returns the email of the user given by the user's Id'
+	* deleteUser
+	    * Takes a delete request and deletes the user of the given id 
      */
 
     private model: UserModel;
@@ -69,7 +71,7 @@ class UserController {
 	    return res.status(201).json({ message: "User Updated "});
 	} catch (e) { 
 	    const error = ensureError(e); 
-	    if (error.message = "User Not Found") { 
+	    if (error.message.startsWith("User Not Found")) { 
 		return res.status(404).json( {error: error.message });
 	    }
 	    return res.status(500).json({ error: error.message });
@@ -91,7 +93,7 @@ class UserController {
 	    return res.status(200).json({ name: userName });
 	} catch (e) {
 	    const error = ensureError(e);
-	    if (error.message == "User Not Found") {
+	    if (error.message.startsWith("User Not Found")) {
 		return res.status(404).json( {error: error.message });
 	    } 
 	    return res.status(500).json( {error: error.message });
@@ -102,7 +104,7 @@ class UserController {
 	/* Get a user's email by their id
 	 * The request must include ---->  
 	    * {id: number}
-	 * The response will be ---> {name: string}
+	 * The response will be ---> 
 	    * {status message: string}
 	    * {email: string}
 	 */
@@ -112,10 +114,31 @@ class UserController {
 	    return res.status(200).json({ email: userEmail });
 	} catch (e) {
 	    const error = ensureError(e);
-	    if (error.message == "User Not Found") {
-		return res.status(404).json( {error: error.message });
+	    if (error.message.startsWith("User Not Found")) {
+		return res.status(404).json({ error: error.message });
 	    } 
-	    return res.status(500).json( {error: error.message });
+	    return res.status(500).json({ error: error.message });
+	}
+    }
+
+    public async deleteUser(req: Request, res: Response): Promise<Response> { 
+	/* Delete a user's data by their id
+	 * The request must include ---->
+	    * {id: number}
+	 * The response will be ---> 
+	    * {status message: string}
+	 */ 
+	   
+	try { 
+	    const id = Number(req.params.id); 
+	    await this.model.delete(id);
+	    return res.status(200).json({ message: "User deleted" });
+	} catch (e) { 
+	    const error = ensureError(e);
+	    if (error.message.startsWith("User Not Found")) {
+		return res.status(404).json({ error: error.message});
+	    }
+	    return res.status(500).json({ error: error.message });
 	}
     }
 }

@@ -56,6 +56,8 @@ class UserModel {
 	    * returns the name of the user with the given id  	
 	*  getEmailById(id: number): Promise<string>
 	    * returns the email of the user with the given id
+	*  getIdByemail(email: string): PRomise<string> 
+	    * returns the id of the user with the given email
 	*  update(id: number, UserUpdateData: object): Promise<void> 
 	    * updates the data of the user with the given id 
 	*  delete(id: number): Promise<void> 
@@ -78,7 +80,6 @@ class UserModel {
 	try {
 	    validateNewUser(user);  
 	    user.password = await hashPassword(user.password);
-	    //await this.database.create(process.env.USER_TABLE, user);
 	    await this.database.create("users", user);
 	} catch (error) { 
 	    throw new Error(`Error adding User ${user.name}: ${error}`);
@@ -102,6 +103,15 @@ class UserModel {
 	    throw new Error("User Not Found");
 	}
 	return email.at(0).email
+    }
+
+    public async getIdByEmail(email: string): Promise<string> {
+	//Returns the id of the user with the email. 
+	const id = await this.database.get("users", ["id"], {"email": email});
+	if (id.length < 1) {
+	    throw new Error("User Not Found");
+	}
+	return id.at(0).id; 
     }
 
     public async update(id: number, data: UserUpdateData<object>): Promise<void> { 

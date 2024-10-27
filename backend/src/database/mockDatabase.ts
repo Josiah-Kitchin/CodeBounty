@@ -57,6 +57,7 @@ class MockDatabase implements Database {
 
     public async delete(tableName: string, id: number) { 
 	this.tables[tableName] = this.tables[tableName].filter((entry: object) => entry.id !== id);
+	
     }
 
 }

@@ -3,9 +3,10 @@
 
 
 import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes.js'
-import logRequests from './middlewares/logging.js'
-import express from 'express'
+import userRoutes from './routes/userRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
+import logRequests from './middlewares/logging.js';
+import express from 'express';
 
 dotenv.config();
 
@@ -19,7 +20,8 @@ app.use(logRequests);
 
 /* ---- Routes ---- */
 
-app.use('/api/', userRoutes);
+app.use('/users/', userRoutes);
+app.use('/profiles/', profileRoutes)
 
 /* ---- Server ---- */
 app.listen(PORT, () => {

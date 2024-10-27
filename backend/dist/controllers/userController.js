@@ -20,6 +20,8 @@ class UserController {
         * Takes a get request and returns the email of the user given by the user's Id'
     * deleteUser
         * Takes a delete request and deletes the user of the given id
+    * loginUser
+        * Takes a request to log in and returns the id of the user and status
      */
     model;
     constructor() {
@@ -130,11 +132,19 @@ class UserController {
         }
     }
     async logInUser(req, res) {
+        /* Returns ok status if the user successfully logs in, an error otherwise
+             * The request must include --->
+            * {email: string, password: string}
+         * The response will be --->
+            * {status message: string, id: number}
+         */
         try {
             const email = req.body.email;
             const password = req.body.password;
             await this.model.logIn(email, password);
-            return res.status(200).json({ message: "User logged in" });
+            const id = await this.model.getIdByEmail(email);
+            //Add in token stuff
+            return res.status(200).json({ message: "User logged in", id: id });
         }
         catch (e) {
             const error = ensureError(e);

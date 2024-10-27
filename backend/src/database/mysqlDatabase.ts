@@ -44,10 +44,7 @@ class MySqlDatabase implements Database {
 
 	//Parse the data object into a valid sql query
 	const columns = Object.keys(data).join(', '); 
-	//changed to single quotes around value ....
-	console.log(data);
 	const values = Object.values(data).map(value => `'${value}'`).join(', ');
-	console.log(values);
 	const query = `INSERT INTO ${tableName} (${columns}) VALUES (${values})`;
 
 	try {

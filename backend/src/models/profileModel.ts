@@ -34,7 +34,6 @@ interface ProfileData<T> {
 }
 
 interface ProfileUpdateData<T> {
-    user_id?: number; 
     bio?: string, 
     age?: number, 
     gender?: string, 
@@ -59,10 +58,20 @@ class ProfileModel {
     }
 
     public async add(profile: ProfileData<object>): Promise<void> { 
+	//Add a profile with the given profile data
 	try {
 	    await this.database.create("profiles", profile);
 	} catch (e) { 
 	    throw new Error(`Error adding profile with user id: ${profile.user_id}: ${e}`);
+	}
+    }
+
+    public async update(userId: number, profile: ProfileUpdateData<object>): Promise<void> {
+	//update a profile with the user id and the given profile data 
+	try {
+	    await this.database.update("profiles", userId, profile);
+	} catch (e) { 
+	    throw new Error (`Error updating profile with user id: ${profile.user_id}: ${e}`)
 	}
     }
 }

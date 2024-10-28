@@ -6,14 +6,14 @@
     SQL Profile Table
     ------------------
      id INT AUTO_INCREMENT PRIMARY KEY,
-     user_id INT NOT NULL,
+     id INT NOT NULL,
      bio TEXT,
      age INT,
-     gender VARCHAR(10),
+     gender ENUM("male", "female", "other"),
      preferences JSON,  
      profile_picture VARCHAR(255),
      location VARCHAR(100),
-     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 
 */
 
@@ -24,7 +24,7 @@ import Database from "../database/databaseInterface.js";
 
 
 interface ProfileData<T> {
-    user_id: number; 
+    id: number; 
     bio: string, 
     age: number, 
     gender: string, 
@@ -34,6 +34,7 @@ interface ProfileData<T> {
 }
 
 interface ProfileUpdateData<T> {
+    id: number
     bio?: string, 
     age?: number, 
     gender?: string, 
@@ -61,17 +62,30 @@ class ProfileModel {
 	//Add a profile with the given profile data
 	try {
 	    await this.database.create("profiles", profile);
+
 	} catch (e) { 
-	    throw new Error(`Error adding profile with user id: ${profile.user_id}: ${e}`);
+	    throw new Error(`Error adding profile with user id: ${profile.id}: ${e}`);
 	}
     }
 
-    public async update(userId: number, profile: ProfileUpdateData<object>): Promise<void> {
+    public async update(profile: ProfileUpdateData<object>): Promise<void> {
 	//update a profile with the user id and the given profile data 
 	try {
-	    await this.database.update("profiles", userId, profile);
+	    await this.database.update("profiles", profile.id, profile);
+
 	} catch (e) { 
-	    throw new Error (`Error updating profile with user id: ${profile.user_id}: ${e}`)
+	    throw new Error (`Error updating profile with user id: ${profile.id}: ${e}`)
+	}
+    }
+
+    public async getProfileById(id: number): Promise<ProfileData<object>> {
+	//Get a profile by the user id 
+	try {
+	    const profileData = await this.database.get("profiles", undefined, {id: id});
+	    return profileData; 
+
+	} catch (e) {
+	    throw new Error(`Error getting profile with id ${id}`);
 	}
     }
 }

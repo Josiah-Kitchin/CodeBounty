@@ -39,7 +39,20 @@
 
 - Post /profiles
     Create a new profile 
-    Request --> {user_id, bio, age, gender, preferences(json), profile_picture, location}
+    Request --> {id(number), bio(string), age(number), gender(male, female, other), preferences(json), 
+                 profile_picture(string NOT WORKING RN), location(strign)}
+    //NOTE: the id should correspond to a user id
     Response --> { status }
 
+- Put /profiles
+    Update a profile
+    //NOTE: The id is required, everything else is optional 
+    Request --> {id(number), bio(string), age(number), gender(male, female, other), preferences(json), 
+                 profile_picture(NOT WORKING RN), location(string)}
+    Response --> { status }
+
+- Get /profiles/<id>
+    Get a profile by their user id 
+    Request --> { none }
+    Response --> { status, profile(following earlier fields)}
 

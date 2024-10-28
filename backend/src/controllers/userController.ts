@@ -49,6 +49,7 @@ class UserController {
 	try {
 	    await this.model.add(req.body); 
 	    return res.status(201).json({ message: "User Created"} );
+
 	} catch (e) { 
 	    const error = ensureError(e);
 	    return res.status(400).json( {error: error.message} );
@@ -73,6 +74,7 @@ class UserController {
 	    const userData = req.body;
 	    await this.model.update(id, userData);
 	    return res.status(201).json({ message: "User Updated "});
+
 	} catch (e) { 
 	    const error = ensureError(e); 
 	    if (error.message.startsWith("User Not Found")) { 
@@ -95,6 +97,7 @@ class UserController {
 	    const id = Number(req.params.id); // Get the ID from the route parameters
 	    const userName = await this.model.getNameById(id);
 	    return res.status(200).json({ name: userName });
+
 	} catch (e) {
 	    const error = ensureError(e);
 	    if (error.message.startsWith("User Not Found")) {
@@ -116,6 +119,7 @@ class UserController {
 	    const id = Number(req.params.id); // Get the ID from the route parameters
 	    const userEmail = await this.model.getEmailById(id);
 	    return res.status(200).json({ email: userEmail });
+	    
 	} catch (e) {
 	    const error = ensureError(e);
 	    if (error.message.startsWith("User Not Found")) {
@@ -137,6 +141,7 @@ class UserController {
 	    const id = Number(req.params.id); 
 	    await this.model.delete(id);
 	    return res.status(200).json({ message: "User deleted" });
+
 	} catch (e) { 
 	    const error = ensureError(e);
 	    if (error.message.startsWith("User Not Found")) {
@@ -162,6 +167,7 @@ class UserController {
 
 
 	    return res.status(200).json({ message: "User logged in", id: id });
+
 	} catch (e) {
 	    const error = ensureError(e);
 	    if (error.message.startsWith("Incorrect")) { 

@@ -31,15 +31,64 @@ class ProfileController {
     }
 
     public async addProfile(req: Request, res: Response): Promise<Response> {
+	/* Add a new profile. The id must be a user id 
+	 * Request --> 
+	    * { ProfileData }
+	 * Response --> 
+	    * { status }
+	 */
+
 	try {
 	    //The middleware turns the json into an object, but we need to store it in json so convert it 
 	    //back to json 
 	    req.body.preferences = JSON.stringify(req.body.preferences);
 	    await this.model.add(req.body); 
 	    return res.status(201).json({ message: "Profile Created"} );
+
 	} catch (e) { 
 	    const error = ensureError(e);
 	    return res.status(400).json( {error: error.message} );
+	}
+    }
+
+    public async updateProfile(req: Request, res: Response): Promise<Response> {
+	/* Update a profile
+	 * Request --> 
+	    * { ProfileUpdateData }
+	 * Response --> 
+	    * { status }
+	 */
+	try {
+	    if ('preferences' in req.body) { 
+		req.body.preferences = JSON.stringify(req.body.preferences);
+	    }
+	    await this.model.update(req.body);
+	    return res.status(201).json({ message: "Profile Updated" });
+
+	} catch (e) { 
+	    const error = ensureError(e); 
+	    return res.status(400).json( {error: error.message });
+	}
+    }
+
+    public async getProfileById(req: Request, res: Response): Promise<Response> {
+	/*  Get a profile by user id
+	 * Request --> 
+	    * { none }
+	 * Response --> 
+	    * { ProfileData }
+	 */
+	try {
+	    const id = Number(req.params.id);
+	    const profile = await this.model.getProfileById(id);
+	    return res.status(200).json( {profile: profile} );
+
+	} catch(e) {
+	    const error = ensureError(e); 
+	    if (error.message.startsWith("Error getting")) { 
+		return res.status(400).json( {error: error.message });
+	    }
+	    return res.status(500).json( {error: error.message });
 	}
     }
 }

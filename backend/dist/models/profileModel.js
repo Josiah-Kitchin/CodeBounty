@@ -2,14 +2,14 @@
     SQL Profile Table
     ------------------
      id INT AUTO_INCREMENT PRIMARY KEY,
-     user_id INT NOT NULL,
+     id INT NOT NULL,
      bio TEXT,
      age INT,
-     gender VARCHAR(10),
+     gender ENUM("male", "female", "other"),
      preferences JSON,
      profile_picture VARCHAR(255),
      location VARCHAR(100),
-     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 
 */
 import MySqlDatabase from "../database/mysqlDatabase.js";
@@ -26,11 +26,31 @@ class ProfileModel {
         this.database = new MySqlDatabase();
     }
     async add(profile) {
+        //Add a profile with the given profile data
         try {
             await this.database.create("profiles", profile);
         }
         catch (e) {
-            throw new Error(`Error adding profile with user id: ${profile.user_id}: ${e}`);
+            throw new Error(`Error adding profile with user id: ${profile.id}: ${e}`);
+        }
+    }
+    async update(profile) {
+        //update a profile with the user id and the given profile data 
+        try {
+            await this.database.update("profiles", profile.id, profile);
+        }
+        catch (e) {
+            throw new Error(`Error updating profile with user id: ${profile.id}: ${e}`);
+        }
+    }
+    async getProfileById(id) {
+        //Get a profile by the user id 
+        try {
+            const profileData = await this.database.get("profiles", undefined, { id: id });
+            return profileData;
+        }
+        catch (e) {
+            throw new Error(`Error getting profile with id ${id}`);
         }
     }
 }

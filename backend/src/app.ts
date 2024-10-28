@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/userRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import logRequests from './middlewares/logging.js';
+import authorizeToken from './middlewares/authorize.js'
 import express from 'express';
 
 dotenv.config();
@@ -17,6 +18,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(logRequests);
+app.use(authorizeToken);
 
 /* ---- Routes ---- */
 

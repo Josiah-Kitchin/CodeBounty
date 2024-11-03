@@ -1,6 +1,9 @@
 /* --------- The user controller file handles requests for operations on the UserModel -------- */
 import { UserModel } from '../models/userModel.js';
 import { ensureError } from '../utils/errors.js';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config({ path: '../../.env' });
 class UserController {
     /* The user controller class handles the business logic of user operations
      * in prescence of a request. Each method is meant to be called by the router in userRoutes
@@ -142,9 +145,10 @@ class UserController {
             const email = req.body.email;
             const password = req.body.password;
             await this.model.logIn(email, password);
-            const id = await this.model.getIdByEmail(email);
+            const id = Number(await this.model.getIdByEmail(email));
             //Add in token stuff
-            return res.status(200).json({ message: "User logged in", id: id });
+            const token = generateToken(id);
+            return res.status(200).json({ message: "User logged in", id: id, token: token });
         }
         catch (e) {
             const error = ensureError(e);
@@ -156,3 +160,7 @@ class UserController {
     }
 }
 export default UserController;
+/* ----- Private ----- */
+const generateToken = (userId) => {
+    return jwt.sign({ id: userId }, process.env.TOKEN_KEY);
+};

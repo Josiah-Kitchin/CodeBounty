@@ -21,7 +21,7 @@ export default function SignUpScreen({URL}: Props) {
   }
 
 
-  const handlePress = async() => {
+  const handlePress = async () => {
     console.log('Email:', email);
     console.log('Password:', password);
     const URL = 'https://master-hen-vastly.ngrok-free.app/api/users/login'

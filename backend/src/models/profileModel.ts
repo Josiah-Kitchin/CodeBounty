@@ -24,23 +24,15 @@ import Database from "../database/databaseInterface.js";
 
 
 interface ProfileData<T> {
-    id: number; 
-    bio: string, 
-    age: number, 
-    gender: string, 
-    preferences: object, 
-    profile_picture: any, 
-    location: string 
+    id: number, 
+    user_name: string,
+    interests: object, 
 }
 
 interface ProfileUpdateData<T> {
     id: number
-    bio?: string, 
-    age?: number, 
-    gender?: string, 
-    preferences?: object, 
-    profile_picture?: any, 
-    location?: string 
+    user_name?: string, 
+    interests?: object
 }
 
 class ProfileModel {

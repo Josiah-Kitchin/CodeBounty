@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 
 
 class UserController { 
@@ -165,7 +165,7 @@ class UserController {
 	    const email = req.body.email; 
 	    const password = req.body.password; 
 	    await this.model.logIn(email, password);
-	    const id = await this.model.getIdByEmail(email);
+	    const id = Number(await this.model.getIdByEmail(email));
 	    //Add in token stuff
 	    
 	    const token = generateToken(id);
@@ -188,6 +188,5 @@ export default UserController;
 /* ----- Private ----- */
 
 const generateToken = (userId: number): string => {
-    return jwt.sign({ id: userId }, process.env.TOKEN_KEY);
-
+    return jwt.sign({ id: userId }, process.env.TOKEN_KEY as string);
 }

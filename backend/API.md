@@ -59,8 +59,7 @@
 
     Create a new profile 
 
-    Request --> {id(number), bio(string), age(number), gender(male, female, other), preferences(json), 
-                 profile_picture(string NOT WORKING RN), location(strign)}
+    Request --> {id(number), user_name(string), interests(json) 
 
     //NOTE: the id should correspond to a user id
 
@@ -72,8 +71,7 @@
 
     //NOTE: The id is required, everything else is optional 
 
-    Request --> {id(number), bio(string), age(number), gender(male, female, other), preferences(json), 
-                 profile_picture(NOT WORKING RN), location(string)}
+    Request --> {id(number), user_name(string), preferences(number) 
 
     Response --> { status }
 

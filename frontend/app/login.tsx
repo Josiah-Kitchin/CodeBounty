@@ -5,7 +5,7 @@ import Button from './components/button/buttons';
 import { useState } from 'react';
 
 type Props = {
-  //label: string;
+
   URL: string
 };
 

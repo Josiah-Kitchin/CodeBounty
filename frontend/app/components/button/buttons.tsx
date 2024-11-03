@@ -43,10 +43,10 @@ export default function Button({ label, theme}: Props) {
 }
 */
 export default function Button({ label, theme }: Props) {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter(); 
 
   const handlePress = () => {
-    // route based on the theme
+    
     if (theme === 'signup') {
       router.push('/signup'); 
     } else if (theme === 'login') {
@@ -58,7 +58,7 @@ export default function Button({ label, theme }: Props) {
     <View style={styles.buttonContainer}>
       <Pressable style={[
           styles.button, 
-          {backgroundColor: 'white'} // Change color based on theme
+          {backgroundColor: 'white'}
         ]} 
         onPress={handlePress}>
         <Text style={styles.buttonLabel}>{label}</Text>

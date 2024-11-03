@@ -7,7 +7,6 @@ export default function NotFoundScreen() {
 
       <Stack.Screen options={{ title: 'Oops! Not Found' }} />
       <View style={styles.container}>
-        /*the fallback route is Home screen. */
         <Link href="/" style={styles.button}>
           Go back to Home screen!
         </Link>

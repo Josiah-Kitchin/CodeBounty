@@ -31,6 +31,11 @@ export default function Index() {
         <Button theme="signup" label="Sign Up"/>        
         <Button theme="login" label="Login"/>
       </View>
+      
+        <Link href="/test" style={styles.button}>
+          Go to Test
+        </Link>
+      
     </View>
   );
   

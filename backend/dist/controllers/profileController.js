@@ -46,7 +46,7 @@ class ProfileController {
             * { status }
          */
         try {
-            if ('preferences' in req.body) {
+            if ('interests' in req.body) {
                 req.body.preferences = JSON.stringify(req.body.preferences);
             }
             await this.model.update(req.body);

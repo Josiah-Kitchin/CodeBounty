@@ -5,15 +5,6 @@
 /*
     SQL Profile Table
     ------------------
-     id INT AUTO_INCREMENT PRIMARY KEY,
-     id INT NOT NULL,
-     bio TEXT,
-     age INT,
-     gender ENUM("male", "female", "other"),
-     preferences JSON,  
-     profile_picture VARCHAR(255),
-     location VARCHAR(100),
-     FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE
 
 */
 

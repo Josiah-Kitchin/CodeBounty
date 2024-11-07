@@ -22,6 +22,10 @@ class ProfileController {
 	    * Takes a post request to add a profile with the profile data. 
 	    * Is meant to only be used at the creation of account. Further modifications to a 
 	    * profile will be via updateProfile
+	* updateProfile
+	    * Update a profile with optional parameters with a given user id
+	* getProfileById
+	    * get the profile information by a user id 
      */
 
     public model: ProfileModel;

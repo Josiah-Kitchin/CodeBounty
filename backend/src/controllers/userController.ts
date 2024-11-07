@@ -27,7 +27,7 @@ class UserController {
 	* updateUser
 	    * Takess a put request and updates the users info based on what data is given by the user's id 
 	* getUserNameById
-	    * Takes a get request and returns the name of the user given by the user's Id
+	    * Takes a get request and returns the username of the user given by the user's Id
 	* getUserEmailById
 	    * Takes a get request and returns the email of the user given by the user's Id'
 	* deleteUser
@@ -44,14 +44,20 @@ class UserController {
 
     public async addUser(req: Request, res: Response): Promise<Response> {
 	/* Create a new user request 
-	 * The request must include: 
-	     * {name: string, 
+	 * The request must include ---->  
+	     * {username: string, 
 	     * {email: string, 
 	     * {password: string}
+	 * The response will be ---> 
+	    * { status message: string
+		token: string }
 	*/ 
 	try {
 	    await this.model.add(req.body); 
-	    return res.status(201).json({ message: "User Created"} );
+	    const id = Number(await this.model.getIdByEmail(req.body.email));
+	    const token = generateToken(id);
+
+	    return res.status(201).json({ message: "User logged in", id: id, token: token });
 
 	} catch (e) { 
 	    const error = ensureError(e);
@@ -65,9 +71,10 @@ class UserController {
 	 * The request body must include ---->  
 	    * {id: number}
 	 * The request body can include ----> 
-	    * {name: string,  
+	    * {username: string,  
 	    * {email: string, 
 	    * {password: string 
+	    * {token: string}
 	 * The response will be ---> 
 	    * {status message: string} */
 	
@@ -91,15 +98,16 @@ class UserController {
 	/* Get a user's name by their id
 	 * The request must include ---->  
 	    * {id: number}
-	 * The response will be ---> {name: string}
+	    * {token: string}
+	 * The response will be ---> {username: string}
 	    * {status message: string}
-	    * {name: string}
+	    * {username: string}
 	 */
 
 	try {
 	    const id = Number(req.params.id); // Get the ID from the route parameters
 	    const userName = await this.model.getNameById(id);
-	    return res.status(200).json({ name: userName });
+	    return res.status(200).json({ username: userName });
 
 	} catch (e) {
 	    const error = ensureError(e);
@@ -113,7 +121,8 @@ class UserController {
     public async getUserEmailById(req: Request, res: Response): Promise<Response> { 
 	/* Get a user's email by their id
 	 * The request must include ---->  
-	    * {id: number}
+	    * {id: number,
+	    * {token: string}
 	 * The response will be ---> 
 	    * {status message: string}
 	    * {email: string}
@@ -136,6 +145,7 @@ class UserController {
 	/* Delete a user's data by their id
 	 * The request must include ---->
 	    * {id: number}
+	    * {token: string}
 	 * The response will be ---> 
 	    * {status message: string}
 	 */ 
@@ -159,14 +169,15 @@ class UserController {
          * The request must include ---> 
 	    * {email: string, password: string}
 	 * The response will be ---> 
-	    * {status message: string, id: number}
+	    * {status message: string, 
+	    *  id: number
+	    *  token: string }
 	 */
 	try {
 	    const email = req.body.email; 
 	    const password = req.body.password; 
 	    await this.model.logIn(email, password);
 	    const id = Number(await this.model.getIdByEmail(email));
-	    //Add in token stuff
 	    
 	    const token = generateToken(id);
 

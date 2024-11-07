@@ -1,7 +1,6 @@
 
 
 
-
 /*
     SQL Profile Table
     ------------------
@@ -16,13 +15,11 @@ import Database from "../database/databaseInterface.js";
 
 interface ProfileData<T> {
     id: number, 
-    user_name: string,
     interests: object, 
 }
 
 interface ProfileUpdateData<T> {
     id: number
-    user_name?: string, 
     interests?: object
 }
 

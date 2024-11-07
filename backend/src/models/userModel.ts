@@ -7,7 +7,7 @@ SQL user Table
 --------------
 
 id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique identifier for each user
-name VARCHAR(100) NOT NULL,          -- User's name
+username VARCHAR(255) NOT NULL,          -- User's name
 email VARCHAR(100) NOT NULL UNIQUE,   -- User's email, must be unique
 password VARCHAR(255) NOT NULL,       -- User's hashed password
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of user creation
@@ -32,13 +32,13 @@ dotenv.config();
 
 
 interface UserData<T> { 
-    name: string; 
+    username: string; 
     email: string; 
     password: string; 
 }
 
 interface UserUpdateData<T>{
-    name?: string; 
+    username?: string; 
     email?: string; 
     password?: string; 
 }
@@ -53,7 +53,7 @@ class UserModel {
 	*  add(user: UserData<object>) Promise<void> 
 	    * Responsible for validating user data, hashing password, and adding user data into the database
 	*  getNameById(id: number): Promise<string> 
-	    * returns the name of the user with the given id  	
+	    * returns the username of the user with the given id  	
 	*  getEmailById(id: number): Promise<string>
 	    * returns the email of the user with the given id
 	*  getIdByemail(email: string): PRomise<string> 
@@ -82,18 +82,18 @@ class UserModel {
 	    user.password = await hashPassword(user.password);
 	    await this.database.create("users", user);
 	} catch (error) { 
-	    throw new Error(`Error adding User ${user.name}: ${error}`);
+	    throw new Error(`Error adding User ${user.username}: ${error}`);
 	}
     }
     
     public async getNameById(id: number): Promise<string> { 
-	//Returns the name of the user by id
-	const name = await this.database.get("users", ["name"], {ID: id})
+	//Returns the username of the user by id
+	const username = await this.database.get("users", ["username"], {ID: id})
 	//the database get method returns a list of objects
-	if (name.length < 1) { 
+	if (username.length < 1) { 
 	    throw new Error(`User Not Found`);
 	}
-	return name.at(0).name 
+	return username.at(0).username 
     }
 
     public async getEmailById(id: number): Promise<string> {
@@ -115,7 +115,7 @@ class UserModel {
     }
 
     public async update(id: number, data: UserUpdateData<object>): Promise<void> { 
-	//Updates the user's name found from their id  
+	//Updates the user's username found from their id  
 	try {
 	    validateUserUpdate(data);
 	    if (data.password !== undefined) { 
@@ -185,7 +185,7 @@ const hashPassword = async (password: string): Promise<string> => {
 
 const validateNewUser = (user: UserData<object>): void => {
     /*
-	validate_user_info takes the name, email and password and confirms 
+	validate_user_info takes the username, email and password and confirms 
 	it matches with our requirments. 
 
 	Requirments
@@ -197,7 +197,7 @@ const validateNewUser = (user: UserData<object>): void => {
 	Name length between 2 and 50 and contain only letters 
 
     */
-    if (!user.name || !user.email || !user.password) { 
+    if (!user.username || !user.email || !user.password) { 
 	throw new Error("All user info fields required");
     }
 
@@ -213,9 +213,9 @@ const validateNewUser = (user: UserData<object>): void => {
 	throw new Error("Password must 8 characters long, contain at least one number, one letter, and one special character.");
     }
 
-    // validate name length and letters 
+    // validate username length and letters 
     const nameTest = /^[a-z ,.'-]+$/i;
-    if (!nameTest.test(user.name)) {
+    if (!nameTest.test(user.username)) {
 	throw new Error("Name must be between 2 and 50 characters and contain only letters.");
     }
 }
@@ -233,9 +233,9 @@ const validateUserUpdate = (data: UserUpdateData<object>) => {
 	    throw new Error("Password must 8 characters long, contain at least one number, one letter, and one special character.");
 	}
     }
-    if (data.name !== undefined) { 
+    if (data.username !== undefined) { 
 	const nameTest = /^[a-z ,.'-]+$/i;
-	if (data.name.length < 2 || data.name.length > 50) {
+	if (data.username.length < 2 || data.username.length > 50) {
 	    throw new Error("Name must be between 2 and 50 characters.");
 	}
     }

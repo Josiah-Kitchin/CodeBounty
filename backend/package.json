@@ -58,6 +58,8 @@
 
     "@types/bcryptjs": "^2.4.6",
 
+    "@types/cors": "^2.8.17",
+
     "@types/express": "^5.0.0",
 
     "@types/jest": "^29.5.13",

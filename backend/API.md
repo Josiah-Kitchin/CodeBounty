@@ -2,6 +2,9 @@
 
 # API Documentation
 
+//NOTE: A token is required in the header for all requests other from creating a new user and logging in 
+        The token should be grabbed from local storage and put into the header automatically by the axios instance
+
 <--- Users --->
 
 - Post /users: 
@@ -16,7 +19,7 @@
 
     Get a user's name by their id 
 
-    Request --> { token }
+    Request --> { none }
 
     Response --> { status, name }
 
@@ -24,7 +27,7 @@
 
     Get a user's email by their id 
 
-    Request --> { token }
+    Request --> { }
 
     Response --> { status, email }
 
@@ -32,7 +35,7 @@
 
     Update a user's data by their id 
 
-    Request --> { name(optional), email(optional), password(optional), token }
+    Request --> { name(optional), email(optional), password(optional), }
 
     Response --> { status }
 
@@ -40,7 +43,7 @@
 
     Delete a user's data by their id 
 
-    Request --> { token }
+    Request --> { none }
 
     Response --> { status }
 
@@ -63,7 +66,7 @@
 
     Create a new profile 
 
-    Request --> {id(number) , interests(json), token}
+    Request --> {id(number) , interests(json) }
 
     //NOTE: the id should correspond to a user id
 
@@ -73,9 +76,9 @@
 
     Update a profile
 
-    //NOTE: The id and token is required, everything else is optional 
+    //NOTE: The id is required, everything else is optional 
 
-    Request --> {id(number), user_name(string), preferences(number), token} 
+    Request --> {id(number), user_name(string), preferences(number) } 
 
     Response --> { status }
 
@@ -83,7 +86,7 @@
 
     Get a profile by their user id 
 
-    Request --> { token }
+    Request --> { none }
 
     Response --> { status, profile(following earlier fields)}
 

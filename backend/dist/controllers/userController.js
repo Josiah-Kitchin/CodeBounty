@@ -53,9 +53,7 @@ class UserController {
     }
     async updateUser(req, res) {
         /* Updates a users data, expects an object with an id and all of the user parameters
-        *
-         * The request body must include ---->
-            * {id: number}
+         *
          * The request body can include ---->
             * {username: string,
             * {email: string,
@@ -64,7 +62,7 @@ class UserController {
          * The response will be --->
             * {status message: string} */
         try {
-            const id = Number(req.params.id);
+            const id = req.body.id;
             delete req.body.id;
             const userData = req.body;
             await this.model.update(id, userData);
@@ -80,9 +78,7 @@ class UserController {
     }
     async getUserNameById(req, res) {
         /* Get a user's name by their id
-         * The request must include ---->
-            * {id: number}
-            * {token: string}
+         * Takes a users id in the params
          * The response will be ---> {username: string}
             * {status message: string}
             * {username: string}
@@ -102,15 +98,16 @@ class UserController {
     }
     async getUserEmailById(req, res) {
         /* Get a user's email by their id
-         * The request must include ---->
-            * {id: number,
-            * {token: string}
+         * Takes in the id from the param
          * The response will be --->
             * {status message: string}
             * {email: string}
          */
         try {
             const id = Number(req.params.id); // Get the ID from the route parameters
+            if (id !== req.body.id) { //make sure no one got their token then trying to look up peoples emails
+                throw new Error("Unauthorized");
+            }
             const userEmail = await this.model.getEmailById(id);
             return res.status(200).json({ email: userEmail });
         }
@@ -119,19 +116,23 @@ class UserController {
             if (error.message.startsWith("User Not Found")) {
                 return res.status(404).json({ error: error.message });
             }
+            if (error.message.startsWith("Unauthorized")) {
+                return res.status(401).json({ error: error.message });
+            }
             return res.status(500).json({ error: error.message });
         }
     }
     async deleteUser(req, res) {
         /* Delete a user's data by their id
-         * The request must include ---->
-            * {id: number}
-            * {token: string}
+         * Takes an id in the parameter
          * The response will be --->
             * {status message: string}
          */
         try {
             const id = Number(req.params.id);
+            if (req.body.id !== id) {
+                throw new Error("Unauthorized");
+            }
             await this.model.delete(id);
             return res.status(200).json({ message: "User deleted" });
         }
@@ -139,6 +140,9 @@ class UserController {
             const error = ensureError(e);
             if (error.message.startsWith("User Not Found")) {
                 return res.status(404).json({ error: error.message });
+            }
+            if (error.message.startsWith("Unauthorized")) {
+                return res.status(401).json({ error: error.message });
             }
             return res.status(500).json({ error: error.message });
         }

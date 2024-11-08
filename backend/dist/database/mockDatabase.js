@@ -4,7 +4,7 @@ class MockDatabase {
      */
     tables;
     constructor() {
-        this.tables = { users: [] };
+        this.tables = { users: [], profiles: [] };
     }
     async create(tableName, data) {
         this.tables[tableName].push(data);

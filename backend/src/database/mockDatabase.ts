@@ -10,7 +10,7 @@ class MockDatabase implements Database {
     
     public tables: any; 
     constructor(){ 
-	this.tables = {users: []};
+	this.tables = {users: [], profiles: []};
     }
      
     public async create(tableName: string, data: object): Promise<void> { 

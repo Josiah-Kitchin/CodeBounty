@@ -4,6 +4,10 @@
 /*
     SQL Profile Table
     ------------------
+   `id` int NOT NULL,
+   `interests` json DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 
 */
 
@@ -13,14 +17,14 @@ import Database from "../database/databaseInterface.js";
 
 
 
-interface ProfileData<T> {
+interface ProfileData {
     id: number, 
-    interests: object, 
+    interests: string[], 
 }
 
-interface ProfileUpdateData<T> {
-    id: number
-    interests?: object
+interface ProfileUpdateData {
+    id: number,
+    interests?: string[]
 }
 
 class ProfileModel {
@@ -38,7 +42,7 @@ class ProfileModel {
 	this.database = new MySqlDatabase();
     }
 
-    public async add(profile: ProfileData<object>): Promise<void> { 
+    public async add(profile: ProfileData): Promise<void> { 
 	//Add a profile with the given profile data
 	try {
 	    await this.database.create("profiles", profile);
@@ -48,7 +52,7 @@ class ProfileModel {
 	}
     }
 
-    public async update(profile: ProfileUpdateData<object>): Promise<void> {
+    public async update(profile: ProfileUpdateData): Promise<void> {
 	//update a profile with the user id and the given profile data 
 	try {
 	    await this.database.update("profiles", profile.id, profile);
@@ -58,7 +62,7 @@ class ProfileModel {
 	}
     }
 
-    public async getProfileById(id: number): Promise<ProfileData<object>> {
+    public async getProfileById(id: number): Promise<ProfileData> {
 	//Get a profile by the user id 
 	try {
 	    const profileData = await this.database.get("profiles", undefined, {id: id});

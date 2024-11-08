@@ -48,11 +48,10 @@ class ProfileController {
             * { ProfileUpdateData }
          * Response -->
             * { status }
+         * The user id is already in the request, do not provide an id
          */
         try {
-            if ('interests' in req.body) {
-                req.body.interests = JSON.stringify(req.body.interests);
-            }
+            req.body.interests = JSON.stringify(req.body.interests);
             await this.model.update(req.body);
             return res.status(201).json({ message: "Profile Updated" });
         }

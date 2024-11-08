@@ -1,6 +1,10 @@
 /*
     SQL Profile Table
     ------------------
+   `id` int NOT NULL,
+   `interests` json DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `profiles_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 
 */
 import MySqlDatabase from "../database/mysqlDatabase.js";

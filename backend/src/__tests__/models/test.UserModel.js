@@ -13,8 +13,8 @@ userModel.database = new MockDatabase();
 describe('User Model Add/Get', () => {
 
     test("User model normal add/get", async () => {
-	const testPerson = {id: 7, name: "John Test", email: "tester@gmail.com", password: "testPass42!"}; 
-	const testPerson2 = {id: 8, name: "Tohn Jest", email: "bester@gmail.com", password: "bestPass42!"}; 
+	const testPerson = {id: 7, username: "John Test", email: "tester@gmail.com", password: "testPass42!"}; 
+	const testPerson2 = {id: 8, username: "Tohn Jest", email: "bester@gmail.com", password: "bestPass42!"}; 
 	await userModel.add(testPerson);
 	await userModel.add(testPerson2);
 	const name = await userModel.getNameById(7);
@@ -33,9 +33,9 @@ describe('User Model Add/Get', () => {
 
     test("invalid inputs", async () => {
 
-	const testBadName = {id: 9, name: "8", email: "tester@gmail.com", password: "testPass42!"};
-	const testBadEmail = {id: 10, name: "Fred Marcus", email: "hithere", password: "testPass52!"};
-	const testBadPassword = {id: 11, name: "Fred Marcus", email: "tester@gmail.com", password: "haha"};
+	const testBadName = {id: 9, username: "8", email: "tester@gmail.com", password: "testPass42!"};
+	const testBadEmail = {id: 10, username: "Fred Marcus", email: "hithere", password: "testPass52!"};
+	const testBadPassword = {id: 11, username: "Fred Marcus", email: "tester@gmail.com", password: "haha"};
 
 	expect(userModel.add(testBadName)).rejects.toThrow("Error adding User 8: Error: Name must be between 2 and 50 characters and contain only letters.")
 	expect(userModel.add(testBadEmail)).rejects.toThrow("Error adding User Fred Marcus: Error: Invalid email format.")
@@ -49,7 +49,7 @@ describe('User Model Add/Get', () => {
 describe("User update", () => {
     
     test("update email", async () => {
-	const test = {id: 100, name: "computer", email: "computer@gmail.com", password: "fkjlds#123"};
+	const test = {id: 100, username: "computer", email: "computer@gmail.com", password: "fkjlds#123"};
 
 	await userModel.add(test);
 	
@@ -59,7 +59,7 @@ describe("User update", () => {
     });   
 
     test("update name", async () => {
-	await userModel.update(100, {name: "jerry"});
+	await userModel.update(100, {username: "jerry"});
 	const name = await userModel.getNameById(100);
 
 	expect(name).toBe("jerry");
@@ -69,7 +69,7 @@ describe("User update", () => {
 describe("User delete", () => {
     
     test("delete user", async () => {
-	const test = {id: 300, name: "iamhere", email: "iamhere@gmail.com", password: "fkjdlsjf#123"};
+	const test = {id: 300, username: "iamhere", email: "iamhere@gmail.com", password: "fkjdlsjf#123"};
 	await userModel.add(test);
 	await userModel.delete(300);
 	expect(userModel.getNameById(300)).rejects.toThrow("User Not Found");

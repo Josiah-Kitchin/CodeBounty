@@ -31,7 +31,7 @@
 
     Response --> { status, email }
 
-- Put /users/( USER ID HERE)
+- Put /users/
 
     Update a user's data by their id 
 
@@ -39,7 +39,7 @@
 
     Response --> { status }
 
-- Delete /users/(USER ID HERE)
+- Delete /users/
 
     Delete a user's data by their id 
 
@@ -66,7 +66,7 @@
 
     Create a new profile 
 
-    Request --> {id(number) , interests(json) }
+    Request --> { interests(json) }
 
     //NOTE: the id should correspond to a user id
 
@@ -76,9 +76,9 @@
 
     Update a profile
 
-    //NOTE: The id is required, everything else is optional 
+    //NOTE: all are optional 
 
-    Request --> {id(number), user_name(string), preferences(number) } 
+    Request --> { username(string), preferences(number) } 
 
     Response --> { status }
 
@@ -88,5 +88,5 @@
 
     Request --> { none }
 
-    Response --> { status, profile(following earlier fields)}
+    Response --> { status, username, preferences}
 

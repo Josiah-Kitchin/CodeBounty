@@ -22,13 +22,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-/* ---- Middleware ---- */
+/* -------------------- Middleware ------------------- */
 
 app.use(express.json());
 app.use(logRequests);
 app.use(cors()); //allow cross origin requests
 
-/* ---- Routes ---- */
+/* ---- ----------------- Routes -------------------- */
 
 app.use('/users/', userRoutes);
 app.use('/profiles/', profileRoutes)
@@ -40,7 +40,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
 });
 
-/* ---- Server ---- */
+/* ----------------------- Server --------------------------- */
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

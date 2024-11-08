@@ -3,11 +3,9 @@
 
 # To-Do
 
-- Authorization  (jsonwebtoken, bcryptjs)
-    - A token is givin, but it is failing to authorize. 
-    - Also, create user should response with a token as well, so you dont have to create the user 
-      then log in the user. 
+ - Write a whole ton of tests
 
-- Tests for controllers, profile model
-
+ - Come up with some better solutions for how tokens are handled with certain 
+   requests. I.E. for the delete user, instead of taking in the url then comparing the id 
+   with the token id, just take the token id instead
 

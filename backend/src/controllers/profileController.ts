@@ -45,7 +45,7 @@ class ProfileController {
 	try {
 	    //The middleware turns the json into an object, but we need to store it in json so convert it 
 	    //back to json 
-	    req.body.preferences = JSON.stringify(req.body.preferences);
+	    req.body.interests = JSON.stringify(req.body.interests);
 	    await this.model.add(req.body); 
 	    return res.status(201).json({ message: "Profile Created"} );
 
@@ -64,7 +64,7 @@ class ProfileController {
 	 */
 	try {
 	    if ('interests' in req.body) { 
-		req.body.preferences = JSON.stringify(req.body.preferences);
+		req.body.interests = JSON.stringify(req.body.interests);
 	    }
 	    await this.model.update(req.body);
 	    return res.status(201).json({ message: "Profile Updated" });

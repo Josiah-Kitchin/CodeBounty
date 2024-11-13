@@ -11,15 +11,19 @@ import (
     "log"
 )
 
-var db *gorm.DB //To be used by models 
+var DB *gorm.DB //To be used by models 
 
 func init() {
     //Open the database on init
     var err error
-    db, err = CreateDBConnection()
+    DB, err = CreateDBConnection()
     if err != nil {
 	log.Fatal("Could not connect to database: ", err)
     }
+}
+
+func getDB() (*gorm.DB) {
+    return DB;
 }
 
 func CreateDBConnection() (*gorm.DB, error) {
@@ -35,7 +39,7 @@ func CreateDBConnection() (*gorm.DB, error) {
 
     credentials := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
 
-    db, err := gorm.Open(mysql.Open(credentials), &gorm.Config{})
-    return db, err
+    DB, err := gorm.Open(mysql.Open(credentials), &gorm.Config{})
+    return DB, err
 }
 

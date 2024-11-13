@@ -26,12 +26,12 @@ func AddUser(userData User) (uint, error) {
     if err != nil {
 	return 0, err
     }
-    if (!(validatePassword(userData.Password) && 
-          validateUsername(userData.Username) && 
-	  validateEmail(userData.Email))) {
-	return 0, errors.New("Invalid username, email or password")
-
-    }
+	//    if (!(validatePassword(userData.Password) && 
+	//          validateUsername(userData.Username) && 
+	//   validateEmail(userData.Email))) {
+	// return 0, errors.New("Invalid username, email or password")
+	//
+	//    }
     userData.Password = hashedPassword
     result := DB.Create(&userData) 
     return userData.ID, result.Error
@@ -85,19 +85,19 @@ func verifyPassword(hash string, password string) (error) {
     return err
 }
 
-func validatePassword(password string) bool {
+func ValidatePassword(password string) bool {
     /* ^ asserts the start of the string, $ asserts the end.
      (?=.*[a-z]) ensures at least one lowercase letter.
      (?=.*[A-Z]) ensures at least one uppercase letter.
      (?=.*\d) ensures at least one digit.
      .{8,} ensures the password is at least 8 characters long. */
 
-    pattern := `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$`
+    pattern := `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}:;,.?]).{8,16}$`
     re := regexp.MustCompile(pattern)
     return re.MatchString(password)
 }   
 
-func validateUsername(username string) bool {
+func ValidateUsername(username string) bool {
     // {3,}$ ensures the username is at least 3 characters long
     // ^[a-zA-Z0-9] ensures only alphabetic chars and numbers
     pattern := `^[a-zA-Z0-9]{3,}$`
@@ -105,7 +105,7 @@ func validateUsername(username string) bool {
     return re.MatchString(username)
 }
 
-func validateEmail(email string) bool {
+func ValidateEmail(email string) bool {
     pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
     re := regexp.MustCompile(pattern)
     return re.MatchString(email)

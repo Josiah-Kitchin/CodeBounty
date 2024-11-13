@@ -1,4 +1,5 @@
 
+
 package main
 
 import (
@@ -11,6 +12,7 @@ import (
 func main() { 
 
     router := gin.Default()
+
     //Allow cross origin 
     router.Use(cors.Default())
 

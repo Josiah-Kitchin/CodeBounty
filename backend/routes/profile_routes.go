@@ -13,5 +13,4 @@ func AttachProfileRoutes(router *gin.Engine) {
     router.PUT("/profiles", handlers.UpdateProfile)
 
     router.GET("/profiles/:id", handlers.GetProfileById)
-
 }

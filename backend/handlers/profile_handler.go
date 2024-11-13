@@ -12,6 +12,10 @@ import (
 )
 
 func AddProfile(c *gin.Context) { 
+    /* Add a new profile 
+     * Request: { interests(string[]) }
+     * Response: { message, error } */ 
+
     id, ok := getIdFromParam(c)
     if !ok {
 	return 
@@ -32,6 +36,10 @@ func AddProfile(c *gin.Context) {
 }
 
 func UpdateProfile(c *gin.Context) {
+    /* Update a profile 
+     * Request: { interests(string[]) }
+     * Response: { message, error } */ 
+
     id, ok := getIdFromParam(c)
     if !ok {
 	return 
@@ -52,7 +60,11 @@ func UpdateProfile(c *gin.Context) {
 } 
 
 func GetProfileById(c *gin.Context) {
-    
+     /* Get a profile by their id 
+     * url: id  
+     * Response: { interests(string[]), error } */ 
+
+
     id, ok := getIdFromParam(c)
     if !ok {
 	return 

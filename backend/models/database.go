@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -23,9 +22,6 @@ func init() {
 func CreateDBConnection() (*gorm.DB, error) {
     /* Create a connection for the global variable db */
 
-    if err := godotenv.Load(); err != nil {
-	log.Fatal("Error loading .env file: ", err)
-    }
     dbHost := os.Getenv("DB_HOST")
     dbName := os.Getenv("DB_NAME")
     dbUser := os.Getenv("DB_USER")

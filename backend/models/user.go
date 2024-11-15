@@ -8,6 +8,8 @@ import (
     "errors"
     "golang.org/x/crypto/bcrypt"
     "regexp"
+    "unicode"
+
 )
 
 type User struct {
@@ -20,14 +22,14 @@ type User struct {
 func AddUser(userData User) (uint, error) {
     hashedPassword, err := hash(userData.Password)
     if err != nil {
-	    return 0, err
+	return 0, err
     }
-    //    if (!(validatePassword(userData.Password) &&
-    //          validateUsername(userData.Username) &&
-    //   validateEmail(userData.Email))) {
-    // return 0, errors.New("Invalid username, email or password")
-    //
-    //    }
+
+    validateErr := validateUserFields(userData.Username, userData.Email, userData.Password)
+    if validateErr != nil {
+	return 0, validateErr
+    }
+       
     userData.Password = hashedPassword
     result := DB.Create(&userData)
     return userData.ID, result.Error
@@ -81,28 +83,76 @@ func verifyPassword(hash string, password string) error {
     return err
 }
 
-func ValidatePassword(password string) bool {
-    /* ^ asserts the start of the string, $ asserts the end.
-       (?=.*[a-z]) ensures at least one lowercase letter.
-       (?=.*[A-Z]) ensures at least one uppercase letter.
-       (?=.*\d) ensures at least one digit.
-       .{8,} ensures the password is at least 8 characters long. */
+func ValidatePassword(password string) error {
+    // Check if the password is at least 8 characters long
+    if len(password) < 8 {
+	return errors.New("password must be at least 8 characters long")
+    }
 
-    pattern := `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}:;,.?]).{8,16}$`
-    re := regexp.MustCompile(pattern)
-    return re.MatchString(password)
+    // Variables to check requirements
+    hasUpper := false
+    hasSpecial := false
+
+    // Check each character
+    for _, char := range password {
+	switch {
+	case unicode.IsUpper(char):
+	    hasUpper = true
+	case unicode.IsPunct(char) || unicode.IsSymbol(char):
+	    hasSpecial = true
+	}
+    }
+
+    // Ensure all requirements are met
+    if !hasUpper {
+	return errors.New("password must contain at least one uppercase letter")
+    }
+
+    if !hasSpecial {
+	return errors.New("password must contain at least one special character")
+    }
+
+    return nil
 }
 
-func ValidateUsername(username string) bool {
-    // {3,}$ ensures the username is at least 3 characters long
-    // ^[a-zA-Z0-9] ensures only alphabetic chars and numbers
-    pattern := `^[a-zA-Z0-9]{3,}$`
-    re := regexp.MustCompile(pattern)
-    return re.MatchString(username)
+func ValidateUsername(username string) error {
+    // Check if the username has at least 3 characters
+    if len(username) < 3 {
+	return errors.New("username must be at least 3 characters long")
+    }
+
+    // Regex for letters only (no special characters or numbers)
+    matched, err := regexp.MatchString(`^[a-zA-Z]+$`, username)
+    if err != nil {
+	return err
+    }
+
+    if !matched {
+	return errors.New("username can only contain letters")
+    }
+
+    return nil
 }
 
-func ValidateEmail(email string) bool {
-    pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-    re := regexp.MustCompile(pattern)
-    return re.MatchString(email)
+func ValidateEmail(email string) error {
+    // Regex for a basic email validation
+    matched, err := regexp.MatchString(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`, email)
+    if err != nil {
+	return err
+    }
+
+    if !matched {
+	return errors.New("invalid email format")
+    }
+
+    return nil
+}
+
+func validateUserFields(username string, email string, password string) (error) {
+    if ((ValidatePassword(password) != nil ||
+         ValidateUsername(username) != nil ||
+         ValidateEmail(email) != nil)) {
+	 return errors.New("Invalid username, email or password")
+    }
+    return nil
 }

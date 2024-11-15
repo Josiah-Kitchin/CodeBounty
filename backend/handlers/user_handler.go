@@ -19,8 +19,8 @@ func RegisterUser(c *gin.Context) {
        Expects {username, email, password} 
        Returns {message, id, token} */
     
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
+    user, ok := getUserData(c)
+    if !ok {
 	return 
     }
 
@@ -76,8 +76,8 @@ func UpdateUser(c *gin.Context) {
 	return
     }
 
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
+    user, ok := getUserData(c) 
+    if !ok {
 	return 
     }
 
@@ -135,8 +135,8 @@ func LogInUser(c *gin.Context) {
        Expects { email, password }
        Returns { message, id, token} */
 
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
+    user, ok := getUserData(c)
+    if !ok {
 	return 
     }
     
@@ -144,12 +144,14 @@ func LogInUser(c *gin.Context) {
     if err != nil {
 	errorMessage := fmt.Sprintf("Error logging in: %s", err)
 	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage })
+	return
     }
 
     token, err := auth.GenerateToken(id)
     if err != nil {
 	errorMessage := fmt.Sprintf("Could not generate token: %s", err)
 	c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
+	return
     }
 
     c.JSON(http.StatusOK, gin.H{ "message": "User Logged In", "id": id, "token": token, "error": "" })
@@ -166,16 +168,17 @@ func LogInUser(c *gin.Context) {
 
 /* --- Utils --- */
 
-func fillUserData(user *models.User, c *gin.Context) (bool) {
+func getUserData(c *gin.Context) (models.User, bool) {
     /* Fill a user struct with user data from the request */
 
-    if err := c.ShouldBindJSON(user); err != nil {
+    var user models.User
+    if err := c.ShouldBindJSON(&user); err != nil {
 	c.JSON(http.StatusBadRequest, gin.H{
             "error": "Invalid data",
         })
-	return false
+	return user, false
     }
-    return true
+    return user, true
 }
 
 

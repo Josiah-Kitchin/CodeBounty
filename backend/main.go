@@ -1,24 +1,22 @@
-
-
 package main
 
 import (
-    "github.com/gin-gonic/gin"
+    "codebounty/middleware"
     "codebounty/routes"
     "github.com/gin-contrib/cors"
+    "github.com/gin-gonic/gin"
 )
 
-
-func main() { 
+func main() {
 
     router := gin.Default()
 
-    //Allow cross origin 
+    //Allow cross origin
     router.Use(cors.Default())
+    router.Use(middleware.LogRequests())
 
     routes.AttachUserRoutes(router)
     routes.AttachProfileRoutes(router)
-
 
     router.Static("/static", "../frontend/build/static")
     //Set any route not specified to the page
@@ -26,7 +24,5 @@ func main() {
 	c.File("../frontend/build/index.html")
     })
 
-
-    router.Run(":8080")
+    router.Run(":3000")
 }
-

@@ -5,6 +5,7 @@ import (
     "github.com/gin-gonic/gin"
     "strconv"
     "net/http"
+    "fmt"
 )
 
 func getIdFromParam(c *gin.Context) (uint, bool) {
@@ -13,7 +14,7 @@ func getIdFromParam(c *gin.Context) (uint, bool) {
     idStr := c.Param("id")
     id64, err := strconv.ParseUint(idStr, 10, 64)
     if err != nil {
-	c.JSON(http.StatusBadRequest, gin.H{ "error": "ID not of type unsigned integer"})
+	c.JSON(http.StatusBadRequest, gin.H{ "error": "ID in param not of type unsigned integer"})
 	return 0, false
     }
     return uint(id64), true
@@ -30,7 +31,8 @@ func getIdFromRequest(c *gin.Context) (uint, bool) {
     //Check that id is an unsigned integer
     idVal, ok := id.(uint)
     if !ok {
-	c.JSON(http.StatusBadRequest, gin.H { "error": "ID is not an unsigned integer" })
+	c.JSON(http.StatusBadRequest, gin.H { "error": "ID in token is not an unsigned integer" })
+	fmt.Println(id)
 	return 0, false 
     }
     return idVal, true

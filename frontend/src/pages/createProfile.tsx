@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axiosInstance from '../axios.config';
 import "./styles/createProfile.css";
+import { useNavigate } from 'react-router-dom'
 
 
 /* The create profile page will be the page after sigining up to set interests and other profile fields */ 
@@ -10,6 +11,8 @@ import "./styles/createProfile.css";
 
 
 const InterestsForm: React.FC = () => {
+  const navigate = useNavigate();
+
   const [interestInput, setInterestInput] = useState<string>('');  // Store current input
   const [interests, setInterests] = useState<string[]>([]);  // Store list of interests
 
@@ -39,10 +42,12 @@ const InterestsForm: React.FC = () => {
     e.preventDefault();
 
     try {
-      const id = localStorage.getItem('id');
 
-      const response = await axiosInstance.post('/profiles', { interests, id });
+      const response = await axiosInstance.post('/profiles', { interests });
       console.log('Interests saved successfully', response.data);
+      if (response.status === 200) {
+        navigate("/dashboard")
+      }
     } catch (error) {
       console.error('Error saving interests', error);
     }

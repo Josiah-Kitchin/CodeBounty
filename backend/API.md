@@ -95,3 +95,38 @@ Request { token }
 
 Response: { interests(string[]), error }
 
+## Projects
+
+### POST /project
+Create a new project for a user 
+
+Request: { token, user_id, title, description, link, tags (string[])}
+Response: { message, error }
+
+### PUT /projects
+
+Update a project for a user 
+
+Request: { token, project_id, title?, description?, link?, tags?}
+Response: { message, error }
+
+### GET /projects/user/:id
+
+Get all projects from a user based of their user id
+
+Params: user id 
+Response { projects: (list of projects), error}
+
+### GET /projects/:id
+
+Get a project by its project id 
+
+Params: project id 
+Response { project, error }
+
+### DELETE /projects/:id
+
+Delete a project by its project id
+
+Params: project id 
+Response { message, error }

@@ -26,6 +26,7 @@ func main() {
 	//Routes
 	routes.AttachUserRoutes(router)
 	routes.AttachProfileRoutes(router)
+	routes.AttachProjectRoutes(router)
 
 	router.Static("/static", "../frontend/build/static")
 	//Set any route not specified to the page

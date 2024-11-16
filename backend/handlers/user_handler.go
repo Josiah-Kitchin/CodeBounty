@@ -157,8 +157,6 @@ func LogInUser(c *gin.Context) {
 //Utils will fill the response with an error if they fail, so after calling the function
 //in a handler function it just needs to return
 
-/* --- Utils --- */
-
 func getUserData(c *gin.Context) (models.User, bool) {
 	/* Fill a user struct with user data from the request */
 

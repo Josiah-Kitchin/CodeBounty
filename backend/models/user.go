@@ -151,7 +151,7 @@ func validateUserFields(username string, email string, password string) error {
 	if ValidatePassword(password) != nil ||
 		ValidateUsername(username) != nil ||
 		ValidateEmail(email) != nil {
-		return errors.New("Invalid username, email or password")
+		return errors.New("invalid username email or password")
 	}
 	return nil
 }

@@ -97,6 +97,18 @@ func GetProjectsByUserId(c *gin.Context) {
 
 }
 
+func DeleteProject(c *gin.Context) {
+	id, ok := getIdFromRequest(c)
+	if !ok {
+		return
+	}
+	if err := models.DeleteProject(id); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Could not delete project"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"error": "Project deleted"})
+}
+
 /* --- utils --- */
 
 func getProjectData(c *gin.Context) (models.Project, bool) {

@@ -6,7 +6,7 @@ type Project struct {
 	ID          uint     `json:"project_id" gorm:"primarykey"`
 	User_id     uint     `json:"user_id"`
 	Title       string   `json:"title"`
-	Description string   `json"description"`
+	Description string   `json:"description"`
 	Link        string   `json:"link"`
 	Tags        []string `json:"tags" gorm:"serializer:json"`
 }
@@ -40,4 +40,9 @@ func GetProjectsByUserId(userID uint) ([]Project, error) {
 	var projects []Project
 	result := DB.Model(&Project{}).Where("user_id = ?", userID).Scan(&projects)
 	return projects, result.Error
+}
+
+func DeleteProject(projectID uint) error {
+	result := DB.Delete(&Project{}, projectID)
+	return result.Error
 }

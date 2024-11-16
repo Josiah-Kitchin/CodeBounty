@@ -4,30 +4,31 @@
 
 package models
 
-
-
 type Profile struct {
-    ID        uint     `gorm:"primarykey"`
-    //Serializer converts the string[] to json when entering it inter the database
-    Interests []string `json:"interests" gorm:"serializer:json"`
+	ID uint `gorm:"primarykey"`
+	//Serializer converts the string[] to json when entering it inter the database
+	Interests []string `json:"interests" gorm:"serializer:json"`
 }
 
 func AddProfile(id uint, profileData Profile) error {
-    profileData.ID = id
-    result := DB.Create(&profileData) //OHHH I THINK ITS HERE , NEED TO CONVERT INTERESTS TO JSON 
-    return result.Error
+	/* Add a profile to a user based on their user id */
+
+	profileData.ID = id
+	result := DB.Create(&profileData)
+	return result.Error
 }
 
 func UpdateProfile(id uint, profileData Profile) error {
-    result := DB.Where("id = ?", id).Updates(&profileData)
-    return result.Error
+	/* Update a profile based on the user id */
+
+	result := DB.Where("id = ?", id).Updates(&profileData)
+	return result.Error
 }
 
 func GetProfileById(id uint) (Profile, error) {
-    var profile Profile
-    result := DB.Model(&Profile{}).Where("id = ?", id).Scan(&profile)
-    return profile, result.Error
+	/* get a profile by a user id */
+
+	var profile Profile
+	result := DB.Model(&Profile{}).Where("id = ?", id).Scan(&profile)
+	return profile, result.Error
 }
-
-
-

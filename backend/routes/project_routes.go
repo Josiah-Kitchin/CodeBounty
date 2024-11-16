@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AttachUserRoutes(router *gin.Engine) {
+func Attach(router *gin.Engine) {
 
-	router.POST("/users", handlers.RegisterUser)
+	router.POST("/projects", middleware.AuthorizeRequest(), handlers.AddProject)
 
-	router.POST("/users/login", handlers.LogInUser)
+	router.PUT("/projects", middleware.AuthorizeRequest(), handlers.UpdateProject)
 
 	router.DELETE("/users", middleware.AuthorizeRequest(), handlers.DeleteUser)
 

@@ -23,8 +23,9 @@ func AddProject(c *gin.Context) {
 	}
 
 	if err := models.AddProject(id, project); err != nil {
+		errorMessage := fmt.Sprintf("Could not add project: %s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Could not add project",
+			"error": errorMessage,
 		})
 		return
 	}

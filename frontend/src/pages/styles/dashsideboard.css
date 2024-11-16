@@ -8,19 +8,26 @@
   background-color: #f4f4f4;
   color: white;
   padding-top: 20px;
-  padding-left: 40px; /* Left padding for sidebar */
+  padding-left: 0; /* Reset left padding */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center items horizontally in the sidebar */
   z-index: 1000; /* Ensures the sidebar stays above other content */
   transition: width 0.3s;
 }
+  
 
 /* Specific styles for the new "Menu" title (h2 with class "m1") */
 .m1 {
-  font-size: 20px; /* Make the title smaller */
-  margin-left: 0; /* Remove any left margin */
-  padding-left: 0; /* No additional padding to shift it */
+  font-size: 20px; /* Set font size */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
   margin-bottom: 20px; /* Space between the title and the buttons */
-  color: #333; /* Optional: Change text color */
+  text-align: center; /* Center the title horizontally */
+  line-height: 60px; /* Match the button height for visual alignment */
+  color: #333; /* Optional: Adjust text color */
 }
+
 
 /* Sidebar button styles */
 .sidebar button {

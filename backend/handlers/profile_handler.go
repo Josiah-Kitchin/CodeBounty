@@ -84,7 +84,7 @@ func getProfileData(c *gin.Context) (models.Profile, bool) {
 	var profile models.Profile
 	if err := c.ShouldBindJSON(&profile); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid data",
+			"error": err.Error(),
 		})
 		return profile, false
 	}

@@ -1,5 +1,8 @@
 import React from 'react';
 import ProjectCard from '../components/projectCard';
+import { useNavigate } from "react-router-dom";
+import "./styles/dashsideboard.css";
+
 
 
 /* The dashboard will be the main page for finding projects, changing pages, etc */ 
@@ -34,13 +37,46 @@ const Dashboard: React.FC = () => {
     },
   ];
 
+  const navigate = useNavigate();
+
   // Handle card click, possibly navigate or show more details
   const handleCardClick = (projectId: number) => {
     console.log(`Project ${projectId} clicked!`);
     // Implement navigation to project details or other actions
   };
 
+  
+  const handleSidebarButtonClick = (button: string) => {
+    console.log(`${button} button clicked!`);
+    navigate("/createProfile");
+    // Implement sidebar actions
+  };
+  
   return (
+    
+    //<div className="dashboard-layout">
+    //  {/* Sidebar */}
+    //  <div className="sidebar">
+    //    <h2>Menu</h2>
+    //    <button onClick={() => handleSidebarButtonClick('Home')}>My profile1</button>
+    //    <button onClick={() => handleSidebarButtonClick('Home')}>My profile2</button>
+    //   <button onClick={() => handleSidebarButtonClick('Home')}>My profile3</button>
+    //    <button onClick={() => handleSidebarButtonClick('Home')}>My profile4</button>
+    //    <button onClick={() => handleSidebarButtonClick('Home')}>My profile5</button>
+    //  </div>
+
+    <div className="dashboard-layout">
+      {/* Sidebar */}
+      <div className="sidebar">
+      <h2 className="m1">Menu</h2>
+        <button onClick={() => handleSidebarButtonClick('Profile')}>My Profile</button>
+        <button onClick={() => handleSidebarButtonClick('Settings')}>P1</button>
+        <button onClick={() => handleSidebarButtonClick('Projects')}>P2</button>
+        <button onClick={() => handleSidebarButtonClick('Logout')}>P3</button>
+      </div>
+    
+
+    <div className="main-content">
     <div className="dashboard-container">
       <h1 className="dashboard-title">Your Projects</h1>
 
@@ -54,7 +90,9 @@ const Dashboard: React.FC = () => {
             onClick={() => handleCardClick(project.id)}
           />
         ))}
+        </div>
       </div>
+    </div>
     </div>
   );
 };

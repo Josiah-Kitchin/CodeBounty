@@ -1,12 +1,13 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 
+
 /* Creates an axios instance to set a base url and check for the token in the header automatically  */
 /* ------------------------------------------------------------------------------------------------ */
 
 	
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',  // Your API base URL
+  baseURL: 'http://localhost:8080',  // Your API base URL
 });
 
 // Add a request interceptor to conditionally add the token

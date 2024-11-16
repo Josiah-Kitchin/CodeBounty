@@ -1,0 +1,85 @@
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Sidebar width */
+  height: 100%;
+  background-color: #f4f4f4;
+  color: white;
+  padding-top: 20px;
+  padding-left: 40px; /* Left padding for sidebar */
+  z-index: 1000; /* Ensures the sidebar stays above other content */
+  transition: width 0.3s;
+}
+
+/* Specific styles for the new "Menu" title (h2 with class "m1") */
+.m1 {
+  font-size: 20px; /* Make the title smaller */
+  margin-left: 0; /* Remove any left margin */
+  padding-left: 0; /* No additional padding to shift it */
+  margin-bottom: 20px; /* Space between the title and the buttons */
+  color: #333; /* Optional: Change text color */
+}
+
+/* Sidebar button styles */
+.sidebar button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 20px;
+  margin: 5px 0;
+  border-radius: 50%; /* Make buttons circular */
+  font-size: 14px; /* Make text smaller inside the buttons */
+  cursor: pointer;
+  width: 60px; /* Set width of each button */
+  height: 60px; /* Set height of each button */
+  display: flex;
+  justify-content: center; /* Center icon/text horizontally */
+  align-items: center; /* Center icon/text vertically */
+}
+
+/* Hover effect for buttons */
+.sidebar button:hover {
+  background-color: #0053ac;
+}
+
+/* Main content styling */
+.main-content {
+  margin-left: 250px; /* Ensure the content doesn't overlap with the sidebar */
+  width: 100%;
+  padding: 20px;
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column; /* Stack title and project cards vertically */
+}
+
+.dashboard-title {
+  font-size: 24px;
+  margin-bottom: 20px; /* Space between title and project cards */
+}
+
+.projects-container {
+  display: flex;
+  flex-wrap: wrap; /* Wrap project cards to the next row if needed */
+  gap: 20px; /* Space between project cards */
+}
+
+/* Responsive design: Sidebar collapses on smaller screens */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding-left: 0; /* Remove left padding for small screens */
+  }
+
+  .sidebar {
+    width: 200px; /* Adjust sidebar width on smaller screens */
+    height: auto;
+    position: static; /* Let sidebar behave like regular content on small screens */
+  }
+
+  .main-content {
+    margin-left: 0; /* No need for left margin when sidebar is stacked */
+  }
+}

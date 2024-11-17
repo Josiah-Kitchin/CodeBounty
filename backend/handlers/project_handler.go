@@ -24,9 +24,7 @@ func AddProject(c *gin.Context) {
 
 	if err := models.AddProject(id, project); err != nil {
 		errorMessage := fmt.Sprintf("Could not add project: %s", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": errorMessage,
-		})
+		c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Project created", "error": ""})
@@ -49,9 +47,8 @@ func UpdateProject(c *gin.Context) {
 	}
 
 	if err := models.UpdateProject(userid, project); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Could not update profile",
-		})
+		errorMessage := fmt.Sprintf("could not update profile: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Project updated", "error": ""})
@@ -104,10 +101,11 @@ func DeleteProject(c *gin.Context) {
 		return
 	}
 	if err := models.DeleteProject(id); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Could not delete project"})
+		errorMessage := fmt.Sprintf("error deleting project: %s", err.Error())
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage })
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"error": "Project deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "Project deleted", "error": ""})
 }
 
 /* --- utils --- */
@@ -116,9 +114,8 @@ func getProjectData(c *gin.Context) (models.Project, bool) {
 	/* Fill a project struct with project data from the request */
 	var project models.Project
 	if err := c.ShouldBindJSON(&project); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid data",
-		})
+		errorMessage := fmt.Sprintf("Error binding json data to project: %s", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{ "error": errorMessage })
 		return project, false
 	}
 	return project, true

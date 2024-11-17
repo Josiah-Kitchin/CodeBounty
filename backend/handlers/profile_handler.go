@@ -49,9 +49,8 @@ func UpdateProfile(c *gin.Context) {
 	}
 
 	if err := models.UpdateProfile(id, profile); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Could not update profile",
-		})
+		errorMessage := fmt.Sprintf("could not update profile: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Profile updated", "error": ""})
@@ -69,7 +68,7 @@ func GetProfileById(c *gin.Context) {
 
 	profile, err := models.GetProfileById(id)
 	if err != nil {
-		errorMessage := fmt.Sprintf("Error getting profile by id: %s: ", err)
+		errorMessage := fmt.Sprintf("Error getting profile by id: %s: ", err.Error())
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
 		return
 	}
@@ -83,9 +82,8 @@ func getProfileData(c *gin.Context) (models.Profile, bool) {
 	/* Fill a profile struct with profile data from the request */
 	var profile models.Profile
 	if err := c.ShouldBindJSON(&profile); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid data",
-		})
+		errorMessage := fmt.Sprintf("Could not bind json to profile: %s", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{ "error": errorMessage })
 		return profile, false
 	}
 	return profile, true

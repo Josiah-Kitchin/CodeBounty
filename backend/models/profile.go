@@ -1,6 +1,6 @@
 /* The profile model defines the structure of the profile jstruct and directly accesses the database to store, update,
    and get profile information
- --------------------------------------------------------------------------------------------------------------------- */
+--------------------------------------------------------------------------------------------------------------------- */
 
 package models
 

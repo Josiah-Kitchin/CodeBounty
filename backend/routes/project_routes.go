@@ -6,16 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AttachProjectRoutes(router *gin.Engine) {
+func AttachProjectRoutes(h *handlers.Handler, router *gin.Engine) {
 
-	router.POST("/projects", middleware.AuthorizeRequest(), handlers.AddProject)
+	router.POST("/projects", middleware.AuthorizeRequest(), h.AddProject)
 
-	router.PUT("/projects", middleware.AuthorizeRequest(), handlers.UpdateProject)
+	router.PUT("/projects", middleware.AuthorizeRequest(), h.UpdateProject)
 
-	router.GET("/projects/user/:id", middleware.AuthorizeRequest(), handlers.GetProjectById)
+	router.GET("/projects/user/:id", middleware.AuthorizeRequest(), h.GetProjectById)
 
-	router.GET("/projects/:id", middleware.AuthorizeRequest(), handlers.GetProjectsByUserId)
+	router.GET("/projects/:id", middleware.AuthorizeRequest(), h.GetProjectsByUserId)
 
-	router.DELETE("/projects/:id", middleware.AuthorizeRequest(), handlers.DeleteProject)
+	router.DELETE("/projects/:id", middleware.AuthorizeRequest(), h.DeleteProject)
 
 }

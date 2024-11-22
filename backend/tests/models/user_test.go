@@ -9,32 +9,33 @@ import (
 )
 
 func TestAddUser(t *testing.T) {
-	// Initialize mock repository
+	/* Test the creation of a user in the db */
+
 	mockRepo, mock, err := NewMockGormDatabase()
 	assert.NoError(t, err)
 
-	// Set up SQL expectations
-	mock.ExpectBegin()
-	mock.ExpectExec("INSERT INTO `users`").
-		WithArgs("testuser", "testPerson@gmail.com", "dummyhashedpassword").
-		WillReturnResult(sqlmock.NewResult(1, 1)) // Simulate ID 1
-	mock.ExpectCommit()
-
-	// Test AddUser
 	user := models.User{
 		Username: "testuser",
 		Email:    "testPerson@gmail.com",
-		Password: "pAssword!123",
+		Password: "testPassword!123",
 	}
+
+	mock.ExpectBegin()
+	mock.ExpectExec("INSERT INTO `users`").
+		WithArgs(user.Username, user.Email, sqlmock.AnyArg()). //any arg because the password is hashed
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
 	id, err := mockRepo.AddUser(user)
 	assert.NoError(t, err)
 	assert.Equal(t, uint(1), id)
 
-	// Ensure SQL expectations were met
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
 func TestDeleteUser(t *testing.T) {
+	/* Test the deletion of a user from the db */
+
 	mockRepo, mock, err := NewMockGormDatabase()
 	assert.NoError(t, err)
 
@@ -52,6 +53,8 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestUpdateUser(t *testing.T) {
+	/* Test an update of the user from the db */
+
 	mockRepo, mock, err := NewMockGormDatabase()
 	assert.NoError(t, err)
 
@@ -59,7 +62,7 @@ func TestUpdateUser(t *testing.T) {
 	user := models.User{Email: "newEmail@gmail.com"}
 
 	mock.ExpectBegin()
-	mock.ExpectExec("UPDATE `users` SET `email`=? WHERE id = ?").
+	mock.ExpectExec("UPDATE `users` SET `email`=\\? WHERE id = \\?").
 		WithArgs(user.Email, userId).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 	mock.ExpectCommit()
@@ -71,25 +74,45 @@ func TestUpdateUser(t *testing.T) {
 }
 
 func TestGetUsernameById(t *testing.T) {
+	/* Test getting a username by id from the db */
+
 	mockRepo, mock, err := NewMockGormDatabase()
 	assert.NoError(t, err)
 
 	user := models.User{
 		ID:       1,
 		Username: "test_user",
-		Password: "passwordTest123!",
-		Email:    "testemail@gmail.com",
 	}
 
-	mock.ExpectBegin()
-	mock.ExpectExec("SELECT FROM `users` (username) WHERE `id` = ?").
-		WithArgs(userId).
-		WillReturnRows(sqlmock.NewRows([]string{"test_user"})).
-		AddRow(user.ID, user.Username, user.Password, user.Email)
-	mock.ExpectCommit()
+	mock.ExpectQuery("SELECT `username` FROM `users` WHERE id = ?").
+		WithArgs(user.ID).
+		WillReturnRows(sqlmock.NewRows([]string{user.Username}).
+			AddRow(user.Username))
 
-	username, err := mockRepo.GetUsernameById(userId)
-	assert.True(t)
+	username, err := mockRepo.GetUsernameById(user.ID)
 	assert.NoError(t, err)
+	assert.Equal(t, username, user.Username)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}
+
+func TestGetEmailById(t *testing.T) {
+	/* Test getting a email by user id */
+
+	mockRepo, mock, err := NewMockGormDatabase()
+	assert.NoError(t, err)
+
+	user := models.User{
+		ID:    1,
+		Email: "test_email@gmail.com",
+	}
+
+	mock.ExpectQuery("SELECT `email` FROM `users` WHERE id = ?").
+		WithArgs(user.ID).
+		WillReturnRows(sqlmock.NewRows([]string{user.Email}).
+			AddRow(user.Email))
+
+	email, err := mockRepo.GetEmailById(user.ID)
+	assert.NoError(t, err)
+	assert.Equal(t, email, user.Email)
 	assert.NoError(t, mock.ExpectationsWereMet())
 }

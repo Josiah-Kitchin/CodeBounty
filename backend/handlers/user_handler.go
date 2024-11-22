@@ -1,185 +1,171 @@
-
-
-/* Handles requests involving the user table */ 
-
+/* Handles requests involving the user table */
 
 package handlers
 
 import (
-    "github.com/gin-gonic/gin"
-    "codebounty/models"
-    "net/http"
-    "codebounty/auth"
-    "fmt"
+	"codebounty/auth"
+	"codebounty/models"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
+func (h *Handler) RegisterUser(c *gin.Context) {
+	/* Create a new user
+	   Expects {username, email, password}
+	   Returns {message, id, token} */
 
-func RegisterUser(c *gin.Context) {
-    /* Create a new user
-       Expects {username, email, password} 
-       Returns {message, id, token} */
-    
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
-	return 
-    }
+	user, ok := getUserData(c)
+	if !ok {
+		return
+	}
 
-    id, err := models.AddUser(user)
-    if err != nil {
-	errorMessage := fmt.Sprintf("Could not add user: %s", err)
-	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage })
-	return 
-    }
+	id, err := h.repo.AddUser(user)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Could not add user: %s", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
 
-    token, err := auth.GenerateToken(id)
-    if err != nil {
-	errorMessage := fmt.Sprintf("Could not generate token: %s", err)
-	c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
-    }
+	token, err := auth.GenerateToken(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Could not generate token: %s", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+	}
 
-    c.JSON(http.StatusCreated, gin.H{
-        "message": "User created successfully",
-        "id": id,
-	"token": token,
-	"error": "",
-    })
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "User created successfully",
+		"id":      id,
+		"token":   token,
+		"error":   "",
+	})
 }
 
-func DeleteUser(c *gin.Context) {
-    /* Delete a user from the database 
-       Expects { id, token }
-       Returns { message } */
+func (h *Handler) DeleteUser(c *gin.Context) {
+	/* Delete a user from the database
+	   Expects { id, token }
+	   Returns { message } */
 
-    id, ok := getIdFromRequest(c)
-    if !ok { // errors are put in the context in getidfromcontext
-	return
-    }
+	id, ok := getIdFromRequest(c)
+	if !ok { // errors are put in the context in getidfromcontext
+		return
+	}
 
-    //Delete the user 
-    err := models.DeleteUser(id); if err != nil {
-	errorMessage := fmt.Sprintf("Could not delete user: %s", err)
-	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage })
-	return
-    }
+	//Delete the user
+	err := h.repo.DeleteUser(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Could not delete user: %s", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{ "message": "User deleted", "error": "" })
+	c.JSON(http.StatusOK, gin.H{"message": "User deleted", "error": ""})
 }
 
-func UpdateUser(c *gin.Context) {
-    /* Update a users info 
-       Expects {id, ...}
-       Returns { message } */
+func (h *Handler) UpdateUser(c *gin.Context) {
+	/* Update a users info
+	   Expects {id, ...}
+	   Returns { message } */
 
+	id, ok := getIdFromRequest(c)
+	if !ok {
+		return
+	}
 
-    id, ok := getIdFromRequest(c)
-    if !ok {
-	return
-    }
+	user, ok := getUserData(c)
+	if !ok {
+		return
+	}
 
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
-	return 
-    }
-
-    if err := models.UpdateUser(id, user); err != nil {
-	c.JSON(http.StatusNotFound, gin.H{ "error": err })
-	return 
-    }
-    c.JSON(http.StatusOK, gin.H{ "message": "User updated", "error": ""})
+	if err := h.repo.UpdateUser(id, user); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "User updated", "error": ""})
 }
 
-func GetUsernameById(c *gin.Context) {
-    /* Get a users username by their id 
-       Expects id in the url
-       Returns { username } */
-    
-    id, ok := getIdFromParam(c)
-    if !ok {
-	return 
-    }
-    
-    username, err := models.GetUsernameById(id) 
-    if err != nil {
-	errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
-	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage})
-	return 
-    }
+func (h *Handler) GetUsernameById(c *gin.Context) {
+	/* Get a users username by their id
+	   Expects id in the url
+	   Returns { username } */
 
-    c.JSON(http.StatusOK, gin.H{ "username": username, "error": "" })
+	id, ok := getIdFromParam(c)
+	if !ok {
+		return
+	}
+
+	username, err := h.repo.GetUsernameById(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"username": username, "error": ""})
 }
 
-func GetEmailById(c *gin.Context) {
-    /* Get a users email by their id 
-       Expects id in the url
-       Returns { email } */
-    
-    id, ok := getIdFromRequest(c)
-    if !ok {
-	return 
-    }
+func (h *Handler) GetEmailById(c *gin.Context) {
+	/* Get a users email by their id
+	   Expects id in the url
+	   Returns { email } */
 
-    //Get the username
-    email, err := models.GetEmailById(id) 
-    if err != nil {
-	errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
-	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage})
-	return 
-    }
+	id, ok := getIdFromRequest(c)
+	if !ok {
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{ "email": email, "error": "" })
+	//Get the username
+	email, err := h.repo.GetEmailById(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"email": email, "error": ""})
 }
 
+func (h *Handler) LogInUser(c *gin.Context) {
+	/* Logs in a user by their email and password
+	   Expects { email, password }
+	   Returns { message, id, token} */
 
-func LogInUser(c *gin.Context) {
-    /* Logs in a user by their email and password 
-       Expects { email, password }
-       Returns { message, id, token} */
+	user, ok := getUserData(c)
+	if !ok {
+		return
+	}
 
-    var user models.User
-    if ok := fillUserData(&user, c); !ok {
-	return 
-    }
-    
-    id, err := models.LogInUser(user.Email, user.Password)
-    if err != nil {
-	errorMessage := fmt.Sprintf("Error logging in: %s", err)
-	c.JSON(http.StatusNotFound, gin.H{ "error": errorMessage })
-    }
+	id, err := h.repo.LogInUser(user.Email, user.Password)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Error logging in: %s", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
+		return
+	}
 
-    token, err := auth.GenerateToken(id)
-    if err != nil {
-	errorMessage := fmt.Sprintf("Could not generate token: %s", err)
-	c.JSON(http.StatusInternalServerError, gin.H{ "error": errorMessage })
-    }
+	token, err := auth.GenerateToken(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("Could not generate token: %s", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{ "message": "User Logged In", "id": id, "token": token, "error": "" })
+	c.JSON(http.StatusOK, gin.H{"message": "User Logged In", "id": id, "token": token, "error": ""})
 }
-
-
-
 
 /* ----------- Utils ---------- */
 
-//Utils will fill the response with an error if they fail, so after calling the function 
-//in a handler function it just needs to return 
+//Utils will fill the response with an error if they fail, so after calling the function
+//in a handler function it just needs to return
 
+func getUserData(c *gin.Context) (models.User, bool) {
+	/* Fill a user struct with user data from the request */
 
-/* --- Utils --- */
-
-func fillUserData(user *models.User, c *gin.Context) (bool) {
-    /* Fill a user struct with user data from the request */
-
-    if err := c.ShouldBindJSON(user); err != nil {
-	c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Invalid data",
-        })
-	return false
-    }
-    return true
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid data",
+		})
+		return user, false
+	}
+	return user, true
 }
-
-
-
-
-
-

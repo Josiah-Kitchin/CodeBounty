@@ -1,45 +1,32 @@
-
-
 package models
 
 import (
-    "gorm.io/driver/mysql"
-    "gorm.io/gorm"
-    "os"
-    "github.com/joho/godotenv"
-    "fmt"
-    "log"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"log"
+	"os"
 )
 
-var DB *gorm.DB //To be used by models 
-
-func init() {
-    //Open the database on init
-    var err error
-    DB, err = CreateDBConnection()
-    if err != nil {
-	log.Fatal("Could not connect to database: ", err)
-    }
+type GormRepo struct {
+	DB *gorm.DB
 }
 
-func getDB() (*gorm.DB) {
-    return DB;
+func NewGormDatabase() *GormRepo {
+	/* Constructer for a GormDatabase
+	Requires a .env set up with DB_HOST, DB_NAME, DB_USER, DB_PASS */
+
+	dbHost := os.Getenv("DB_HOST")
+	dbName := os.Getenv("DB_NAME")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASS")
+
+	credentials := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
+
+	db, err := gorm.Open(mysql.Open(credentials), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("could not connect to database: %s", err.Error())
+	}
+
+	return &GormRepo{DB: db}
 }
-
-func CreateDBConnection() (*gorm.DB, error) {
-    /* Create a connection for the global variable db */
-
-    if err := godotenv.Load(); err != nil {
-	log.Fatal("Error loading .env file: ", err)
-    }
-    dbHost := os.Getenv("DB_HOST")
-    dbName := os.Getenv("DB_NAME")
-    dbUser := os.Getenv("DB_USER")
-    dbPassword := os.Getenv("DB_PASS")
-
-    credentials := fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, dbPassword, dbHost, dbName)
-
-    DB, err := gorm.Open(mysql.Open(credentials), &gorm.Config{})
-    return DB, err
-}
-

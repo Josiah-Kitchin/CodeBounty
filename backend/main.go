@@ -1,30 +1,44 @@
-
 package main
 
 import (
-    "github.com/gin-gonic/gin"
-    "codebounty/routes"
-    "github.com/gin-contrib/cors"
+	"codebounty/handlers"
+	"codebounty/middleware"
+	"codebounty/models"
+	"codebounty/routes"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	"log"
+	"os"
 )
 
+func main() {
 
-func main() { 
+	//Load env variables
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file: ", err)
+	}
 
-    router := gin.Default()
-    //Allow cross origin 
-    router.Use(cors.Default())
+	router := gin.Default()
 
-    routes.AttachUserRoutes(router)
-    routes.AttachProfileRoutes(router)
+	//Middleware
+	router.Use(cors.Default()) //allow cross origin
+	router.Use(middleware.LogRequests())
 
+	//Create repo and handler
+	repo := models.NewGormDatabase()
+	handler := handlers.NewHandler(repo)
 
-    router.Static("/static", "../frontend/build/static")
-    //Set any route not specified to the page
-    router.NoRoute(func(c *gin.Context) {
-	c.File("../frontend/build/index.html")
-    })
+	//Routes
+	routes.AttachUserRoutes(handler, router)
+	routes.AttachProfileRoutes(handler, router)
+	routes.AttachProjectRoutes(handler, router)
 
+	router.Static("/static", "../frontend/build/static")
+	//Set any route not specified to the page
+	router.NoRoute(func(c *gin.Context) {
+		c.File("../frontend/build/index.html")
+	})
 
-    router.Run(":8080")
+	router.Run(":" + os.Getenv("PORT"))
 }
-

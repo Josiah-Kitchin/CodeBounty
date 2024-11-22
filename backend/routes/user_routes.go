@@ -1,25 +1,22 @@
-
 package routes
 
 import (
-    "codebounty/handlers"
-    "github.com/gin-gonic/gin"
+	"codebounty/handlers"
+	"codebounty/middleware"
+	"github.com/gin-gonic/gin"
 )
 
+func AttachUserRoutes(h *handlers.Handler, router *gin.Engine) {
 
-func AttachUserRoutes(router *gin.Engine) {
+	router.POST("/users", h.RegisterUser)
 
-    router.POST("/users", handlers.RegisterUser)
+	router.POST("/users/login", h.LogInUser)
 
-    router.POST("/users/login", handlers.LogInUser)
+	router.DELETE("/users", middleware.AuthorizeRequest(), h.DeleteUser)
 
-    router.DELETE("/users", handlers.DeleteUser)
+	router.PUT("/users", middleware.AuthorizeRequest(), h.UpdateUser)
 
-    router.PUT("/users", handlers.UpdateUser)
+	router.GET("/users/username/:id", middleware.AuthorizeRequest(), h.GetUsernameById)
 
-    router.GET("/users/username/:id", handlers.GetUsernameById)
-
-    router.GET("/users/email", handlers.GetEmailById)
+	router.GET("/users/email", middleware.AuthorizeRequest(), h.GetEmailById)
 }
-
-

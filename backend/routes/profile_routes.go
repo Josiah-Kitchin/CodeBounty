@@ -1,17 +1,17 @@
-
 package routes
 
 import (
-    "codebounty/handlers"
-    "github.com/gin-gonic/gin"
+	"codebounty/handlers"
+	"codebounty/middleware"
+	"github.com/gin-gonic/gin"
 )
 
-func AttachProfileRoutes(router *gin.Engine) {
+func AttachProfileRoutes(h *handlers.Handler, router *gin.Engine) {
 
-    router.POST("/profiles", handlers.AddProfile)
+	router.POST("/profiles", middleware.AuthorizeRequest(), h.AddProfile)
 
-    router.PUT("/profiles", handlers.UpdateProfile)
+	router.PUT("/profiles", middleware.AuthorizeRequest(), h.UpdateProfile)
 
-    router.GET("/profiles/:id", handlers.GetProfileById)
+	router.GET("/profiles/:id", middleware.AuthorizeRequest(), h.GetProfileById)
 
 }

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"codebounty/handlers"
 	"codebounty/middleware"
+	"codebounty/models"
 	"codebounty/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,10 +25,14 @@ func main() {
 	router.Use(cors.Default()) //allow cross origin
 	router.Use(middleware.LogRequests())
 
+	//Create repo and handler
+	repo := models.NewGormDatabase()
+	handler := handlers.NewHandler(repo)
+
 	//Routes
-	routes.AttachUserRoutes(router)
-	routes.AttachProfileRoutes(router)
-	routes.AttachProjectRoutes(router)
+	routes.AttachUserRoutes(handler, router)
+	routes.AttachProfileRoutes(handler, router)
+	routes.AttachProjectRoutes(handler, router)
 
 	router.Static("/static", "../frontend/build/static")
 	//Set any route not specified to the page

@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func RegisterUser(c *gin.Context) {
+func (h *Handler) RegisterUser(c *gin.Context) {
 	/* Create a new user
 	   Expects {username, email, password}
 	   Returns {message, id, token} */
@@ -20,7 +20,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	id, err := models.AddUser(user)
+	id, err := h.repo.AddUser(user)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not add user: %s", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
@@ -41,7 +41,7 @@ func RegisterUser(c *gin.Context) {
 	})
 }
 
-func DeleteUser(c *gin.Context) {
+func (h *Handler) DeleteUser(c *gin.Context) {
 	/* Delete a user from the database
 	   Expects { id, token }
 	   Returns { message } */
@@ -52,7 +52,7 @@ func DeleteUser(c *gin.Context) {
 	}
 
 	//Delete the user
-	err := models.DeleteUser(id)
+	err := h.repo.DeleteUser(id)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Could not delete user: %s", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
@@ -62,7 +62,7 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted", "error": ""})
 }
 
-func UpdateUser(c *gin.Context) {
+func (h *Handler) UpdateUser(c *gin.Context) {
 	/* Update a users info
 	   Expects {id, ...}
 	   Returns { message } */
@@ -77,14 +77,14 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if err := models.UpdateUser(id, user); err != nil {
+	if err := h.repo.UpdateUser(id, user); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "User updated", "error": ""})
 }
 
-func GetUsernameById(c *gin.Context) {
+func (h *Handler) GetUsernameById(c *gin.Context) {
 	/* Get a users username by their id
 	   Expects id in the url
 	   Returns { username } */
@@ -94,7 +94,7 @@ func GetUsernameById(c *gin.Context) {
 		return
 	}
 
-	username, err := models.GetUsernameById(id)
+	username, err := h.repo.GetUsernameById(id)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
@@ -104,7 +104,7 @@ func GetUsernameById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"username": username, "error": ""})
 }
 
-func GetEmailById(c *gin.Context) {
+func (h *Handler) GetEmailById(c *gin.Context) {
 	/* Get a users email by their id
 	   Expects id in the url
 	   Returns { email } */
@@ -115,7 +115,7 @@ func GetEmailById(c *gin.Context) {
 	}
 
 	//Get the username
-	email, err := models.GetEmailById(id)
+	email, err := h.repo.GetEmailById(id)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Error getting user by id: %s: ", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
@@ -125,7 +125,7 @@ func GetEmailById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"email": email, "error": ""})
 }
 
-func LogInUser(c *gin.Context) {
+func (h *Handler) LogInUser(c *gin.Context) {
 	/* Logs in a user by their email and password
 	   Expects { email, password }
 	   Returns { message, id, token} */
@@ -135,7 +135,7 @@ func LogInUser(c *gin.Context) {
 		return
 	}
 
-	id, err := models.LogInUser(user.Email, user.Password)
+	id, err := h.repo.LogInUser(user.Email, user.Password)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Error logging in: %s", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})

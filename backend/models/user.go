@@ -11,14 +11,7 @@ import (
 	"unicode"
 )
 
-type User struct {
-	ID       uint   `gorm:"primarykey"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-func AddUser(userData User) (uint, error) {
+func (repo *GormRepo) AddUser(userData User) (uint, error) {
 	hashedPassword, err := hash(userData.Password)
 	if err != nil {
 		return 0, err
@@ -30,37 +23,37 @@ func AddUser(userData User) (uint, error) {
 	}
 
 	userData.Password = hashedPassword
-	result := DB.Create(&userData)
+	result := repo.DB.Create(&userData)
 	return userData.ID, result.Error
 }
 
-func DeleteUser(id uint) error {
-	result := DB.Delete(&User{}, id)
+func (repo *GormRepo) DeleteUser(id uint) error {
+	result := repo.DB.Delete(&User{}, id)
 	return result.Error
 }
 
-func UpdateUser(id uint, userData User) error {
-	result := DB.Where("id = ?", id).Updates(&userData)
+func (repo *GormRepo) UpdateUser(id uint, userData User) error {
+	result := repo.DB.Where("id = ?", id).Updates(&userData)
 	return result.Error
 }
 
-func GetUsernameById(id uint) (string, error) {
+func (repo *GormRepo) GetUsernameById(id uint) (string, error) {
 	var username string
-	result := DB.Model(&User{}).Select("username").Where("id = ?", id).Scan(&username)
+	result := repo.DB.Model(&User{}).Select("username").Where("id = ?", id).Scan(&username)
 	return username, result.Error
 }
 
-func GetEmailById(id uint) (string, error) {
+func (repo *GormRepo) GetEmailById(id uint) (string, error) {
 	var email string
-	result := DB.Model(&User{}).Select("email").Where("id = ?", id).Scan(&email)
+	result := repo.DB.Model(&User{}).Select("email").Where("id = ?", id).Scan(&email)
 	return email, result.Error
 }
 
-func LogInUser(email string, password string) (uint, error) {
+func (repo *GormRepo) LogInUser(email string, password string) (uint, error) {
 	/* Log in a user with their email and password */
 
 	var user User
-	result := DB.Model(&User{}).Where("email = ?", email).Scan(&user)
+	result := repo.DB.Model(&User{}).Where("email = ?", email).Scan(&user)
 	if result.Error != nil {
 		return 0, result.Error
 	}

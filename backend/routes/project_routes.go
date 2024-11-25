@@ -18,4 +18,7 @@ func AttachProjectRoutes(h *handlers.Handler, router *gin.Engine) {
 
 	router.DELETE("/projects/:id", middleware.AuthorizeRequest(), h.DeleteProject)
 
+	router.GET("/projects", middleware.AuthorizeRequest(), h.GetAllProjects)
+
+	router.GET("/projects/matches", middleware.AuthorizeRequest(), h.GetMatchedProjects)
 }

@@ -130,3 +130,15 @@ Delete a project by its project id
 
 Params: project id 
 Response { message, error }
+
+### GET /projects
+
+Get all projects
+
+Response { projects }
+
+### GET /projects/matches
+
+Get all matched projects
+
+Response { projects }

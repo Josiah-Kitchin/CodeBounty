@@ -108,7 +108,31 @@ func (h *Handler) DeleteProject(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Project deleted", "error": ""})
 }
 
-/* --- utils --- */
+func (h *Handler) GetAllProjects(c *gin.Context) {
+	projects, err := h.repo.GetAllProjects()
+	if err != nil {
+		errorMessage := fmt.Sprintf("error getting all project: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"projects": projects})
+}
+
+func (h *Handler) GetMatchedProjects(c *gin.Context) {
+	id, ok := getIdFromRequest(c)
+	if !ok {
+		return
+	}
+	projects, err := h.repo.GetMatchedProjects(id)
+	if err != nil {
+		errorMessage := fmt.Sprintf("error getting matched projects: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": errorMessage})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"projects": projects})
+}
+
+/* ---------- utils ---------- */
 
 func getProjectData(c *gin.Context) (models.Project, bool) {
 	/* Fill a project struct with project data from the request */

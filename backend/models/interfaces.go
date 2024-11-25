@@ -49,4 +49,6 @@ type ProjectModel interface {
 	GetProjectById(userID uint) (Project, error)
 	GetProjectsByUserId(userID uint) ([]Project, error)
 	DeleteProject(projectID uint) error
+	GetAllProjects() ([]Project, error)
+	GetMatchedProjects(userID uint) ([]Project, error)
 }

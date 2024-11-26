@@ -67,10 +67,10 @@ func TestGetProfileById(t *testing.T) {
 	}
 	jsonInterests, _ := json.Marshal(profile.Interests)
 
-	mock.ExpectQuery(`^SELECT \* FROM ` + "`profiles`" + ` WHERE id = \?$`). //it sometimes trolls and you need to add regex urself
-											WithArgs(userId).
-											WillReturnRows(sqlmock.NewRows([]string{"id", "interests"}).
-												AddRow(userId, jsonInterests))
+	mock.ExpectQuery("SELECT \\* FROM `profiles` WHERE id = ?"). //it sometimes trolls and you need to add regex urself
+									WithArgs(userId).
+									WillReturnRows(sqlmock.NewRows([]string{"id", "interests"}).
+										AddRow(userId, jsonInterests))
 
 	resultProfile, err := mockRepo.GetProfileById(userId)
 	assert.NoError(t, err)

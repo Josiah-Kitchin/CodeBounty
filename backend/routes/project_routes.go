@@ -12,10 +12,13 @@ func AttachProjectRoutes(h *handlers.Handler, router *gin.Engine) {
 
 	router.PUT("/projects", middleware.AuthorizeRequest(), h.UpdateProject)
 
-	router.GET("/projects/user/:id", middleware.AuthorizeRequest(), h.GetProjectById)
+	router.GET("/projects/byproject/:id", middleware.AuthorizeRequest(), h.GetProjectById)
 
-	router.GET("/projects/:id", middleware.AuthorizeRequest(), h.GetProjectsByUserId)
+	router.GET("/projects/byuser/:id", middleware.AuthorizeRequest(), h.GetProjectsByUserId)
 
 	router.DELETE("/projects/:id", middleware.AuthorizeRequest(), h.DeleteProject)
 
+	router.GET("/projects/all", middleware.AuthorizeRequest(), h.GetAllProjects)
+
+	router.GET("/projects/matches", middleware.AuthorizeRequest(), h.GetMatchedProjects)
 }

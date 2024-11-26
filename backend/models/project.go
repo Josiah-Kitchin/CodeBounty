@@ -37,3 +37,20 @@ func (repo *GormRepo) DeleteProject(projectID uint) error {
 	result := repo.DB.Delete(&Project{}, projectID)
 	return result.Error
 }
+
+func (repo *GormRepo) GetAllProjects() ([]Project, error) {
+	/* Get all projects */
+
+	var projects []Project
+	result := repo.DB.Model(&Project{}).Scan(&projects)
+	return projects, result.Error
+}
+
+func (repo *GormRepo) GetMatchedProjects(userID uint) ([]Project, error) {
+	/* Get projects for a user that match the user interests to project tags */
+
+	query := "CALL GetMatchingProjects(?)"
+	var matchedProjects []Project
+	result := repo.DB.Raw(query, userID).Scan(&matchedProjects)
+	return matchedProjects, result.Error
+}

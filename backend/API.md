@@ -110,14 +110,14 @@ Update a project for a user
 Request: { token, project_id, title?, description?, link?, tags?}
 Response: { message, error }
 
-### GET /projects/user/:id
+### GET /projects/byuser/:id
 
 Get all projects from a user based of their user id
 
 Params: user id 
 Response { projects: (list of projects), error}
 
-### GET /projects/:id
+### GET /projects/byproject/:id
 
 Get a project by its project id 
 
@@ -131,7 +131,7 @@ Delete a project by its project id
 Params: project id 
 Response { message, error }
 
-### GET /projects
+### GET /projects/all
 
 Get all projects
 

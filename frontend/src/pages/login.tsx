@@ -5,7 +5,7 @@ import "./styles/login.css";
 import axiosInstance from "../axios.config";
 
 
-					/*  Login Page */ 
+/*  Login Page */
 /* ---------------------------------------------------------------------------------------------------- */
 
 
@@ -35,12 +35,12 @@ const Login: React.FC = () => {
 
       // Handle the response (e.g., redirect to login on success)
       if (response.status === 200) {
-	const { token, id } = response.data;
+        const { token, id } = response.data;
 
-      // Store token and ID in localStorage
+        // Store token and ID in localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('id', id);
-	navigate("/dashboard");
+        navigate("/dashboard");
       }
     } catch (err: any) {
       // Handle errors (e.g., show error message)
@@ -56,52 +56,52 @@ const Login: React.FC = () => {
     navigate("/signup");  // Navigate to login page when the user clicks "Log In"
   };
 
-  
 
 
-    return (
-	<div className="login-container">
-	<h1 className="welcome-message">
-	    Welcome to <span className="bounty-text">CodeBounty</span>
-	</h1>
-        <div className="login-card">
-	    <h2>Login</h2>
-	    <form onSubmit={handleSubmit}>
-		<div className="input-group">
-		    <label htmlFor="email">Email</label>
-		    <input
-			type="email"
-			id="email"
-			value={email}
-			onChange={(e) => setEmail(e.target.value)}
-			required
-		    />
-		</div>
-		<div className="input-group">
-		    <label htmlFor="password">Password</label>
-		    <input
-			type="password"
-			id="password"
-			value={password}
-			onChange={(e) => setPassword(e.target.value)}
-			required
-		    />
-		</div>
-		<button type="submit" className="login-btn" disabled={loading}>
-		    {loading ? "Logging In..." : "Log In"}
-		</button>
-	    </form>
-        
-	  {error && <p className="error-message">{error}</p>}
 
-          <p className="switch-link">
-	     Don't have an account?{" "}
-             <button onClick={handleSwitchToSignup} className="switch-btn">
-               Sign Up
-             </button>
-          </p>
-        </div>
+  return (
+    <div className="login-container">
+      <h1 className="welcome-message">
+        Welcome to <span className="bounty-text">CodeBounty</span>
+      </h1>
+      <div className="login-card">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Logging In..." : "Log In"}
+          </button>
+        </form>
+
+        {error && <p className="error-message">{error}</p>}
+
+        <p className="switch-link">
+          Don't have an account?{" "}
+          <button onClick={handleSwitchToSignup} className="switch-btn">
+            Sign Up
+          </button>
+        </p>
       </div>
+    </div>
   );
 };
 

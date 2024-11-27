@@ -7,7 +7,7 @@ import axios, { InternalAxiosRequestConfig } from 'axios';
 
 	
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080',  // Your API base URL
+  baseURL: 'http://localhost:3000',  // Your API base URL
 });
 
 // Add a request interceptor to conditionally add the token

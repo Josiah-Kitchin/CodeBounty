@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom'
 /* ---------------------------------------------------------------------------------------------------- */
 
 
-
 const InterestsForm: React.FC = () => {
   const navigate = useNavigate();
 

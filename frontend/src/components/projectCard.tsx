@@ -1,24 +1,23 @@
 import React from 'react';
 import './styles/projectCard.css';
+import { Project } from './interfaces.js'
 
 
-// Define the prop types for the ProjectCard component
 interface ProjectCardProps {
-  title: string;
-  description: string;
-  image?: string; // Optional image prop
-  onClick?: () => void; // Optional click handler
+  project: Project,
+  onClick: () => void
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, description, image, onClick }) => {
+
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick }) => {
   return (
     <div className="project-card" onClick={onClick}>
       <div className="project-card-header">
-        {image && <img src={image} alt={title} className="project-card-image" />}
-        <h2 className="project-card-title">{title}</h2>
+        <h2 className="project-card-title">{project.title}</h2>
       </div>
       <div className="project-card-body">
-        <p className="project-card-description">{description}</p>
+        <p className="project-card-description">{project.description}</p>
+        <p className="project-card-tags">{`#${project.tags}`}</p>
       </div>
     </div>
   );

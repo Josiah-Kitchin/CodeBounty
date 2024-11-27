@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
 
     fetchProjects();
 
-  });
+  }, []);
 
 
   // Handle card click, possibly navigate or show more details

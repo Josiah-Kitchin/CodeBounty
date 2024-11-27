@@ -8,8 +8,11 @@ import axiosInstance from "../axios.config";
 /*  Login Page */
 /* ---------------------------------------------------------------------------------------------------- */
 
+interface LoginPageProps {
+  onLogin: () => void;
+}
 
-const Login: React.FC = () => {
+const Login: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);  // For error handling
@@ -40,6 +43,7 @@ const Login: React.FC = () => {
         // Store token and ID in localStorage
         localStorage.setItem('token', token);
         localStorage.setItem('id', id);
+        onLogin(); 
         navigate("/dashboard");
       }
     } catch (err: any) {

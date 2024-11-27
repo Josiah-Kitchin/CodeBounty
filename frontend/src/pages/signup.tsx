@@ -5,10 +5,13 @@ import "./styles/signup.css";
 
 
 
-					/*  Signup Page */ 
+/*  Signup Page */
 /* ---------------------------------------------------------------------------------------------------- */
+interface SignUpPageProps {
+  onLogin: () => void;
+}
 
-const Signup: React.FC = () => {
+const Signup: React.FC<SignUpPageProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,12 +43,13 @@ const Signup: React.FC = () => {
         password,
       });
 
-      const { token, id } = response.data; 
+      const { token, id } = response.data;
       // Handle the response (e.g., redirect to login on success)
       if (response.status === 201) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('id', id);
-	  navigate("/createProfile");
+        localStorage.setItem('token', token);
+        localStorage.setItem('id', id);
+        onLogin();
+        navigate("/createProfile");
       }
     } catch (err: any) {
       // Handle errors (e.g., show error message)

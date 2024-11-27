@@ -10,20 +10,23 @@ import CreateProfile from "./pages/createProfile";
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLogIn = () => {
+    setIsLoggedIn(true);
+  }
 
   return (
     <Router>
       <Routes>
-        {/* Default route redirects to login page if not logged in (need to implement this ) */}
+        {/* Default route redirects to login page if not logged in */}
         <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
         
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onLogin={handleLogIn} />} />
         
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup onLogin={handleLogIn} />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/createProfile" element={<CreateProfile />} />
+        <Route path="/createProfile" element={!isLoggedIn ? <CreateProfile /> : <Navigate to="/dashboard" /> } />
       </Routes>
     </Router>
   );

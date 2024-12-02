@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./styles/dashsideboard.css";
 import "./styles/shared.css"
 import axiosInstance from "../axios.config";
+import NavBar from "../components/nav";
 
 
 
@@ -49,24 +50,10 @@ const Dashboard: React.FC = () => {
   };
 
 
-  const handleSidebarButtonClick = (button: string) => {
-    console.log(`${button} button clicked!`);
-    navigate("/createProfile");
-    // Implement sidebar actions
-  };
-
   return (
 
     <div className="dashboard-layout">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <h2 className="m1">Menu</h2>
-        <button onClick={() => handleSidebarButtonClick('Profile')}>My Profile</button>
-        <button onClick={() => handleSidebarButtonClick('Settings')}>P1</button>
-        <button onClick={() => handleSidebarButtonClick('Projects')}>P2</button>
-        <button onClick={() => handleSidebarButtonClick('Logout')}>P3</button>
-      </div>
-
+      <NavBar />
 
       <div className="main-content">
         <div className="dashboard-container">

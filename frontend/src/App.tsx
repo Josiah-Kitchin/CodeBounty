@@ -26,7 +26,8 @@ const App: React.FC = () => {
 
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route path="/createProfile" element={!isLoggedIn ? <CreateProfile /> : <Navigate to="/dashboard" /> } />
+        <Route path="/createProfile" element={<CreateProfile />} />
+
       </Routes>
     </Router>
   );

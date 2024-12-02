@@ -11,7 +11,7 @@ const NavBar: React.FC = () => {
     return (
         <div className="sidebar">
             <button onClick={() => !isDashboard ? navigate("dashboard") : navigate("")}>Dashboard</button>
-            <button onClick={() => !isMyProfile ? navigate("my_profile") : navigate("")}>My Profile</button>
+            <button onClick={() => !isMyProfile ? navigate("myProfile") : navigate("")}>My Profile</button>
         </div>
     ); 
 }

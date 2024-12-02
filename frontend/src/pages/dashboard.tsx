@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProjectCard from '../components/projectCard';
 import { Project } from '../components/interfaces';
-import { useNavigate } from "react-router-dom";
 import "./styles/page.css";
 import "./styles/shared.css"
 import axiosInstance from "../axios.config";
@@ -21,6 +20,8 @@ const Dashboard: React.FC = () => {
   const [matchedProjects, setMatchedProjects] = useState([]);
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Store error if there is one
+  const [showMatched, setShowMatched] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -46,13 +47,19 @@ const Dashboard: React.FC = () => {
   const getFullProject = (projectId: number) => {
     console.log(`Project ${projectId} clicked!`);
     // Implement navigation to project details or other actions
-  };
+  }
+
+  const switchProjects = () => {
+    setShowMatched(!showMatched);
+    setShowAll(!showAll);
+  }
 
 
   return (
-
+    <>
+    <NavBar />
+    <button className="switch-projects-btn" onClick={switchProjects}>{showMatched ? "Show All Projects" : "Show Matched Projects"}</button>
     <div className="dashboard-layout">
-      <NavBar />
 
       <div className="main-content">
         <div className="dashboard-container">
@@ -61,7 +68,7 @@ const Dashboard: React.FC = () => {
               <div className="spinner"></div>
             ) : error ? (
               <h2>{error}</h2>
-            ) : ( 
+            ) : showMatched ? ( 
               <>
               <h1 className="dashboard-title">Matched Projects</h1>
               <div className="projects-container">
@@ -75,7 +82,9 @@ const Dashboard: React.FC = () => {
                   ))) : <h2>No Matched Projects</h2>
                 }
               </div>
-
+              </>
+            ) : (
+              <>
               <h1 className="dashboard-title">All Projects</h1>
               <div className="projects-container">
                 {
@@ -95,6 +104,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

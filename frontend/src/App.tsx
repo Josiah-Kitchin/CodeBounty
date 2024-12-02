@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
         <Route path="/createProfile" element={<CreateProfile />} />
 
-        <Route path="myProfile" element={<MyProfile />} />
+        <Route path="/myProfile" element={<MyProfile />} />
 
       </Routes>
     </Router>

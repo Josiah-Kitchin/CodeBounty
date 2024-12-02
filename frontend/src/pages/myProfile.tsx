@@ -5,7 +5,7 @@ import axiosInstance from "../axios.config";
 import NavBar from "../components/nav";
 import ProjectCard from '../components/projectCard';
 import { Project } from '../components/interfaces';
-import "./styles/dashsideboard.css";
+import "./styles/page.css";
 import "./styles/shared.css"
 
 const MyProfile: React.FC = () => {
@@ -19,9 +19,11 @@ const MyProfile: React.FC = () => {
                 const userId = localStorage.getItem("id");
                 const response = await axiosInstance.get("/profiles/byuser/" + userId);
                 setMyProjects(response.data.projects);
-                setLoading(false);
             } catch (e: any) {
+                console.log(e);
                 setError(e);
+            } finally {
+              setLoading(false);
             }
         }
         fetchMyProjects(); 
@@ -40,7 +42,7 @@ const MyProfile: React.FC = () => {
               <h2>{error}</h2>
             ) : ( 
               <>
-              <h1 className="dashboard-title">Matched Projects</h1>
+              <h1 className="dashboard-title">My Projects</h1>
               <div className="projects-container">
                 {
                   myProjects ? (
@@ -49,14 +51,16 @@ const MyProfile: React.FC = () => {
                       project={project}
                       onClick={() => console.log("clicked")}
                     />
-                  ))) : <h2>No Matched Projects</h2>
+                  ))) : <h2>No Projects</h2>
                 }
               </div>
 
-              <h1 className="dashboard-title">All Projects</h1>
               </>
             )
           }
+          <div> 
+            <h1>Post Project</h1>
+          </div>
         </div>
       </div>
     </div>

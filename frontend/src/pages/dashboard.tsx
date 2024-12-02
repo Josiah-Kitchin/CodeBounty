@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProjectCard from '../components/projectCard';
 import { Project } from '../components/interfaces';
 import { useNavigate } from "react-router-dom";
-import "./styles/dashsideboard.css";
+import "./styles/page.css";
 import "./styles/shared.css"
 import axiosInstance from "../axios.config";
 import NavBar from "../components/nav";
@@ -16,7 +16,6 @@ import NavBar from "../components/nav";
 
 
 const Dashboard: React.FC = () => {
-  const navigate = useNavigate();
 
   const [allProjects, setAllProjects] = useState([]); // Store the fetched data
   const [matchedProjects, setMatchedProjects] = useState([]);

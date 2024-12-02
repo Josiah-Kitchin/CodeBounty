@@ -36,15 +36,6 @@
   color: white; /* Change text color */
 }
 
-/* Styles for the "Menu" title */
-.m1 {
-  font-size: 20px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  line-height: 60px; /* Match the nav bar height */
-  color: #333; /* Optional: Text color for the title */
-}
 
 /* Main content styling */
 .main-content {

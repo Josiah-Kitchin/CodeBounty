@@ -39,7 +39,7 @@
 
 /* Main content styling */
 .main-content {
-  margin-top: 60px; /* Ensure content starts below the nav bar */
+  margin-top: 80px; /* Ensure content starts below the nav bar */
   padding: 20px;
 }
 
@@ -67,7 +67,7 @@
 /* Parent container for the all projects section */
 .dashboard-container {
   display: flex;
-  flex-direction: column; /* Stack header and projects vertically */
+  flex-direction: row; /* Stack header and projects vertically */
   align-items: flex-start; /* Align content to the left */
   gap: 20px; /* Space between header and projects */
   margin-top: 20px; /* Optional: Add spacing from the top */
@@ -75,11 +75,13 @@
 
 /* All projects container */
 .projects-container {
-  width: 100%; /* Take full width */
-  background-color: #f9f9f9; /* Optional: Add background color */
-  padding: 15px; /* Add padding for content */
-  border-radius: 5px; /* Optional: Add rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a slight shadow */
+  width: 100%;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;  /* Allow vertical scrolling if content overflows */
+  max-height: calc(100vh - 80px);  /* Limit height to prevent overflow at the top */
 }
 
 

@@ -70,7 +70,6 @@ const Dashboard: React.FC = () => {
               <h2>{error}</h2>
             ) : showMatched ? ( 
               <>
-              <h1 className="dashboard-title">Matched Projects</h1>
               <div className="projects-container">
                 {
                   matchedProjects ? (
@@ -85,7 +84,6 @@ const Dashboard: React.FC = () => {
               </>
             ) : (
               <>
-              <h1 className="dashboard-title">All Projects</h1>
               <div className="projects-container">
                 {
                   allProjects ? (

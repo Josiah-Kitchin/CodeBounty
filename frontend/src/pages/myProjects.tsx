@@ -5,10 +5,11 @@ import axiosInstance from "../axios.config";
 import NavBar from "../components/nav";
 import ProjectCard from '../components/projectCard';
 import { Project } from '../components/interfaces';
+import ProjectUpload from '../components/projectUpload';
 import "./styles/page.css";
 import "./styles/shared.css"
 
-const MyProfile: React.FC = () => {
+const MyProjectsPage: React.FC = () => {
     const [myProjects, setMyProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,7 +18,8 @@ const MyProfile: React.FC = () => {
         const fetchMyProjects = async () => {
             try {
                 const userId = localStorage.getItem("id");
-                const response = await axiosInstance.get("/profiles/byuser/" + userId);
+                const response = await axiosInstance.get("/projects/byuser/" + userId);
+                console.log("sent request for my projects");
                 setMyProjects(response.data.projects);
             } catch (e: any) {
                 console.log(e);
@@ -42,7 +44,6 @@ const MyProfile: React.FC = () => {
               <h2>{error}</h2>
             ) : ( 
               <>
-              <h1 className="dashboard-title">My Projects</h1>
               <div className="projects-container">
                 {
                   myProjects ? (
@@ -59,7 +60,8 @@ const MyProfile: React.FC = () => {
             )
           }
           <div> 
-            <h1>Post Project</h1>
+            <h1>Upload Project</h1>
+            <ProjectUpload />
           </div>
         </div>
       </div>
@@ -67,4 +69,4 @@ const MyProfile: React.FC = () => {
     );
 }
 
-export default MyProfile; 
+export default MyProjectsPage; 

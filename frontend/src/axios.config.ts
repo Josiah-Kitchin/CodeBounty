@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 
+
 /* Creates an axios instance to set a base url and check for the token in the header automatically  */
 /* ------------------------------------------------------------------------------------------------ */
 

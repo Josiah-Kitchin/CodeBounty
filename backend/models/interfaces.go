@@ -35,7 +35,7 @@ type ProfileModel interface {
 /* ----------- Projects ------------ */
 
 type Project struct {
-	ID          uint     `json:"project_id" gorm:"primarykey"`
+	ID          uint     `json:"project_id" gorm:"primaryKey"`
 	User_id     uint     `json:"user_id"`
 	Title       string   `json:"title"`
 	Description string   `json:"description"`

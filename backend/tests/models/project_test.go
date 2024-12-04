@@ -154,3 +154,24 @@ func TestGetAllProjects(t *testing.T) {
 	assert.Equal(t, project2.Title, projects[1].Title)
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
+
+func TestDeleteProject(t *testing.T) {
+	mockRepo, mock, err := NewMockGormDatabase()
+	assert.NoError(t, err)
+
+	userId := uint(2)
+	project := models.Project{
+		ID: 1,
+	}
+
+	mock.ExpectBegin()
+	mock.ExpectExec("DELETE FROM `projects` WHERE (user_id = ? AND id = ?) AND `projects`.id = ?").
+		WithArgs(userId, project.ID, project.ID).
+		WillReturnResult(sqlmock.NewResult(0, 1))
+	mock.ExpectCommit()
+
+	err = mockRepo.DeleteProject(userId, project.ID)
+
+	assert.NoError(t, err)
+	assert.NoError(t, mock.ExpectationsWereMet())
+}

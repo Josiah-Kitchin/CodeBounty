@@ -96,11 +96,15 @@ func (h *Handler) GetProjectsByUserId(c *gin.Context) {
 }
 
 func (h *Handler) DeleteProject(c *gin.Context) {
-	id, ok := getIdFromRequest(c)
+	userId, ok := getIdFromRequest(c)
 	if !ok {
 		return
 	}
-	if err := h.repo.DeleteProject(id); err != nil {
+	projectId, okay := getIdFromParam(c)
+	if !okay {
+		return
+	}
+	if err := h.repo.DeleteProject(userId, projectId); err != nil {
 		errorMessage := fmt.Sprintf("error deleting project: %s", err.Error())
 		c.JSON(http.StatusNotFound, gin.H{"error": errorMessage})
 		return

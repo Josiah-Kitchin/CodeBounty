@@ -33,8 +33,8 @@ func (repo *GormRepo) GetProjectsByUserId(userID uint) ([]Project, error) {
 	return projects, result.Error
 }
 
-func (repo *GormRepo) DeleteProject(projectID uint) error {
-	result := repo.DB.Delete(&Project{}, projectID)
+func (repo *GormRepo) DeleteProject(userID uint, projectID uint) error {
+	result := repo.DB.Where("user_id = ? AND id = ?", userID, projectID).Delete(&Project{}, projectID)
 	return result.Error
 }
 

@@ -9,3 +9,7 @@ export interface Project {
     link: string, 
     tags: string[]
 }
+
+export interface Profile { 
+    interests: string[]
+}

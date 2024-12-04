@@ -1,55 +1,47 @@
 
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from "react";
+import { Project } from "./interfaces";
 import axiosInstance from "../axios.config";
-import "./styles/projectUpload.css";
 
-interface ProjectUploadProps {
-    onUpload: () => void
+interface EditProjectCardProps {
+    project: Project,
+    onSave: () => void;
 }
 
-const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
-    const [projectData, setProjectData] = useState({
-        title: "",
-        description: "",
-        link: "",
-        tags: [] as string[]
-    });
-    const [error, setError] = useState(null);
+const EditProjectCard: React.FC<EditProjectCardProps> = ({ project, onSave }) => {
+
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [projectData, setProjectData] = useState({ ...project });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setProjectData((prev) => ({
+        setProjectData(prev => ({
             ...prev,
             [name]: value
         }));
     }
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axiosInstance.post("/projects", projectData);
+            const response = await axiosInstance.put("/projects", projectData);
             console.log(response.data.message);
-            setProjectData({
-                title: "",
-                description: "",
-                link: "",
-                tags: [] as string[]
-            });
-            onUpload()
-        } catch (err: any) {
-            setError(err);
+            onSave();
+        } catch (e: any) {
+            console.log(e);
+            setError(e);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const handleAddTag = (tag: string) => {
         if (!projectData.tags.includes(tag)) {
             setProjectData((prev) => ({
                 ...prev,
-                tags: [...prev.tags, tag], // Append the new tag
+                tags: [...prev.tags, tag],
             }));
         }
     };
@@ -57,10 +49,9 @@ const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
     const handleRemoveTag = (tag: string) => {
         setProjectData((prev) => ({
             ...prev,
-            tags: prev.tags.filter((t) => t !== tag), // Remove the tag
+            tags: prev.tags.filter((t) => t !== tag),
         }));
     };
-
 
     return (
         <form className="form-container" onSubmit={handleSubmit}>
@@ -79,8 +70,7 @@ const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
             <div className="form-field">
                 <label>
                     Description:
-                    <input
-                        type="text"
+                    <textarea
                         name="description"
                         value={projectData.description}
                         onChange={handleChange}
@@ -111,7 +101,7 @@ const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
                                 const value = e.currentTarget.value.trim();
                                 if (value) {
                                     handleAddTag(value);
-                                    e.currentTarget.value = ""; // Clear the input
+                                    e.currentTarget.value = ""; // Clear input
                                 }
                             }
                         }}
@@ -124,8 +114,8 @@ const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
                             <button
                                 type="button"
                                 onClick={() => handleRemoveTag(tag)}
-                                style={{ marginLeft: "4px" }}
                             >
+                                ✕
                             </button>
                         </span>
                     ))}
@@ -133,12 +123,10 @@ const ProjectUpload: React.FC<ProjectUploadProps> = ({ onUpload }) => {
             </div>
             {error && <div className="error-message">{error}</div>}
             <button type="submit" className="submit-button" disabled={loading}>
-                {loading ? "Uploading..." : "Upload"}
+                {loading ? "Saving..." : "Save"}
             </button>
         </form>
     );
 };
 
-
-export default ProjectUpload;
-
+export default EditProjectCard; 

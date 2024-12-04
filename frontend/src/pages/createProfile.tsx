@@ -13,7 +13,7 @@ const InterestsForm: React.FC = () => {
   const navigate = useNavigate();
 
   const [interestInput, setInterestInput] = useState<string>('');  // Store current input
-  const [interests, setInterests] = useState<string[]>([]);  // Store list of interests
+  const [interests, setInterests] = useState<string[]>(["Programming!"]);  // Store list of interests
 
   // Handle change in interest input
   const handleInterestInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

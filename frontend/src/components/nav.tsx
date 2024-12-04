@@ -6,12 +6,12 @@ import { useMatch } from "react-router-dom";
 const NavBar: React.FC = () => {
     const navigate = useNavigate(); 
     const isDashboard = useMatch("/dashboard");
-    const isMyProfile = useMatch("/myProfile");
+    const isMyProjects = useMatch("/myProjects");
 
     return (
         <div className="sidebar">
             <button onClick={() => !isDashboard ? navigate("/dashboard") : navigate("")}>Dashboard</button>
-            <button onClick={() => !isMyProfile ? navigate("/myProjects") : navigate("")}>My Projects</button>
+            <button onClick={() => !isMyProjects? navigate("/myProjects") : navigate("")}>My Projects</button>
         </div>
     ); 
 }

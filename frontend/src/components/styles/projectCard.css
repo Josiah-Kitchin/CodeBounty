@@ -47,3 +47,58 @@
   font-size: 0.9rem; 
   font-style: italic; 
 }
+
+/* src/components/ProjectCard.css */
+.large-project-card {
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 1500;
+  margin: 1rem;
+  cursor: pointer;
+}
+
+.large-project-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.large-project-card-title {
+  font-size: 2.2rem;
+  color: #333;
+  margin: 0;
+}
+
+.large-project-card-body {
+  padding-top: 0.5rem;
+}
+
+.large-project-card-description {
+  color: #555;
+  margin: 2rem; 
+  font-size: 1.2rem;
+}
+
+.large-project-card-tags {
+  color: #555; 
+  font-size: 1rem; 
+  font-style: italic; 
+}
+
+
+.repo-button {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.repo-button:hover {
+  background-color: #0056b3;
+}

@@ -7,6 +7,7 @@ import Signup from "./pages/signup";
 import Dashboard from "./pages/dashboard";
 import CreateProfile from "./pages/createProfile";
 import MyProjects from "./pages/myProjects";
+import SingleProject from "./pages/singleProject";
 
 
 const App: React.FC = () => {
@@ -31,6 +32,8 @@ const App: React.FC = () => {
 
         <Route path="/myProjects" element={<MyProjects />} />
 
+        <Route path="/singleProject" element={<SingleProject />} />
+        
       </Routes>
     </Router>
   );

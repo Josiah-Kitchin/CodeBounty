@@ -5,6 +5,7 @@ import "./styles/page.css";
 import "./styles/shared.css"
 import axiosInstance from "../axios.config";
 import NavBar from "../components/nav";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -22,6 +23,8 @@ const Dashboard: React.FC = () => {
   const [error, setError] = useState(null); // Store error if there is one
   const [showMatched, setShowMatched] = useState(true);
   const [showAll, setShowAll] = useState(false);
+
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -44,9 +47,10 @@ const Dashboard: React.FC = () => {
 
 
   // Handle card click, possibly navigate or show more details
-  const getFullProject = (projectId: number) => {
-    console.log(`Project ${projectId} clicked!`);
-    // Implement navigation to project details or other actions
+  const getFullProject = (project: Project) => {
+    console.log(`Project ${Object.entries(project)} clicked!`);
+    navigate("/singleProject", { state: { id: project.project_id} });
+    
   }
 
   const switchProjects = () => {
@@ -76,7 +80,7 @@ const Dashboard: React.FC = () => {
                   matchedProjects.map((project: Project) => (
                     <ProjectCard
                       project={project}
-                      onClick={() => getFullProject(project.id)}
+                      onClick={() => getFullProject(project)}
                     />
                   ))) : <h2>No Matched Projects</h2>
                 }
@@ -90,7 +94,7 @@ const Dashboard: React.FC = () => {
                   allProjects.map((project: Project) => (
                     <ProjectCard
                       project={project}
-                      onClick={() => getFullProject(project.id)}
+                      onClick={() => getFullProject(project)}
                     />
                   ))) : <h2>No Projects</h2>
                 }

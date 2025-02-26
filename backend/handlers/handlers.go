@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"codebounty/models"
+    "codebounty/models"
 )
 
 type Handler struct {
-	repo *models.GormRepo
+    repo *models.GormRepo
 }
 
 func NewHandler(repo *models.GormRepo) *Handler {
-	return &Handler{repo: repo}
+    return &Handler{repo: repo}
 }
